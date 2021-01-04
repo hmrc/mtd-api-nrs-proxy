@@ -1,3 +1,3 @@
 # microservice specific routes
 
-GET        /hello-world             uk.gov.hmrc.mtdapinrsproxy.controllers.MicroserviceHelloWorldController.hello
+POST        /:nino/:notableEvent       controllers.NrsController.submit(nino: String, notableEvent: String)
