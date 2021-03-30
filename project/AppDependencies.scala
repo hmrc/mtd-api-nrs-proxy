@@ -1,6 +1,4 @@
 import play.core.PlayVersion.current
-import play.sbt.PlayImport._
-import sbt.Keys.libraryDependencies
 import sbt._
 
 object AppDependencies {
@@ -14,6 +12,7 @@ object AppDependencies {
     "org.scalatest"           %% "scalatest"                % "3.2.3"  % Test,
     "com.typesafe.play"       %% "play-test"                % current  % Test,
     "com.vladsch.flexmark"    %  "flexmark-all"             % "0.36.8" % "test, it",
+    "org.scoverage"          %% "scalac-scoverage-runtime" % "1.4.2"   % "test, it",
     "org.scalatestplus.play"  %% "scalatestplus-play"       % "4.0.3"  % "test, it"
   )
 }
