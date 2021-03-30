@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,14 +32,14 @@ object AppDependencies {
   )
 
   def test(scope: String = "test, it"): Seq[sbt.ModuleID] = Seq(
-    "org.scalatest"          %% "scalatest"          % "3.2.3"             % scope,
-    "com.vladsch.flexmark"   % "flexmark-all"        % "0.36.8"           % scope,
-    "org.scalacheck"         %% "scalacheck"         % "1.15.1"            % scope,
-    "org.scalamock"          %% "scalamock"          % "5.1.0"             % scope,
-    "com.typesafe.play"      %% "play-test"          % PlayVersion.current % scope,
-    "org.scalatestplus.play" %% "scalatestplus-play" % "4.0.3"             % scope,
-    "com.github.tomakehurst" % "wiremock-jre8"      % "2.27.2"            % scope,
-    "com.miguno.akka"        %% "akka-mock-scheduler"       % "0.5.5"             % scope
+    "org.scalatest"          %% "scalatest"                % "3.2.3"             % scope,
+    "com.vladsch.flexmark"   % "flexmark-all"              % "0.36.8"            % scope,
+    "org.scalacheck"         %% "scalacheck"               % "1.15.1"            % scope,
+    "org.scalamock"          %% "scalamock"                % "5.1.0"             % scope,
+    "com.typesafe.play"      %% "play-test"                % PlayVersion.current % scope,
+    "org.scalatestplus.play" %% "scalatestplus-play"       % "4.0.3"             % scope,
+    "com.github.tomakehurst" % "wiremock-jre8"             % "2.27.2"            % scope,
+    "com.miguno.akka"        %% "akka-mock-scheduler"      % "0.5.5"             % scope
   )
 
 }
