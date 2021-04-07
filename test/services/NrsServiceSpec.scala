@@ -45,7 +45,7 @@ class NrsServiceSpec extends ServiceSpec {
   private val encodedString: String = "encodedString"
   private val checksum: String = "checksum"
 
-  private val nrsId = "a5894863-9cd7-4d0d-9eee-301ae79cbae6"
+  private val nrsId: String = "a5894863-9cd7-4d0d-9eee-301ae79cbae6"
 
   private val nrsSubmission: NrsSubmission =
     NrsSubmission(
@@ -94,12 +94,12 @@ class NrsServiceSpec extends ServiceSpec {
       "return the expected result" in new Test {
 
         MockNrsConnector.submitNrs(nrsSubmission)
-          .returns(Future.successful(Right(NrsResponse(nrsId, ""))))
+          .returns(Future.successful(Right(NrsResponse(nrsId))))
 
         MockedHashUtil.encode(submitRequestBodyString.toString()).returns(encodedString)
         MockedHashUtil.getHash(submitRequestBodyString.toString()).returns(checksum)
 
-        await(service.submit(nino, notableEvent, submitRequestBodyString, nrsId, timestamp)) shouldBe Some(NrsResponse("a5894863-9cd7-4d0d-9eee-301ae79cbae6",""))
+        await(service.submit(nino, notableEvent, submitRequestBodyString, nrsId, timestamp)) shouldBe Some(NrsResponse("a5894863-9cd7-4d0d-9eee-301ae79cbae6"))
       }
     }
 

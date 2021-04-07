@@ -16,15 +16,11 @@
 
 package models.response
 
-import play.api.libs.json.{JsPath, Reads}
-import models.response.NrsResponse.deprecatedString
+import play.api.libs.json.{Json, Reads}
 
-case class NrsResponse(nrSubmissionId: String, cadesTSignature: String = deprecatedString, timestamp: String = "")
+case class NrsResponse(nrSubmissionId: String)
 
 object NrsResponse {
 
-  val deprecatedString: String = "This has been deprecated - DO NOT USE"
-  val empty: NrsResponse = NrsResponse("", deprecatedString, "")
-
-  implicit val reads: Reads[NrsResponse] = (JsPath \ "nrSubmissionId" ).read[String].map(NrsResponse(_, deprecatedString, ""))
+  implicit val reads: Reads[NrsResponse] = Json.reads[NrsResponse]
 }

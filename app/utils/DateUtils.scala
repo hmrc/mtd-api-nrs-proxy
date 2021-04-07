@@ -26,19 +26,9 @@ object DateUtils {
   val dateTimePattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
   val datePattern = "yyyy-MM-dd"
 
-  val dateTimeFormat: Format[DateTime] = Format[DateTime](
-    JodaReads.jodaDateReads(dateTimePattern),
-    JodaWrites.jodaDateWrites(dateTimePattern)
-  )
-
   val isoInstantDateFormat: Format[DateTime] = Format[DateTime](
     JodaReads.jodaDateReads(isoInstantDatePattern),
     JodaWrites.jodaDateWrites(isoInstantDatePattern)
-  )
-
-  val defaultDateTimeFormat: Format[DateTime] = Format[DateTime](
-    JodaReads.jodaDateReads(isoInstantDatePattern),
-    JodaWrites.jodaDateWrites(dateTimePattern)
   )
 
   val dateFormat: Format[LocalDate] = Format[LocalDate](
