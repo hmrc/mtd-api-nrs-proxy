@@ -50,7 +50,7 @@ class NrsConnectorSpec extends ConnectorSpec
 
   override lazy val app: Application = new GuiceApplicationBuilder()
     .in(Environment.simple(mode = Mode.Dev))
-    .configure("metrics.enabled" -> "false", "auditing.enabled" -> "false")
+    .configure("metrics.enabled" -> "false")
     .build()
 
   val httpClient: HttpClient = app.injector.instanceOf[HttpClient]

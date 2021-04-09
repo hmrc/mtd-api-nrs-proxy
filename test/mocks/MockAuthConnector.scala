@@ -16,26 +16,24 @@
 
 package mocks
 
-import controllers.UserRequest
-import org.joda.time.DateTime
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import play.api.libs.json.JsValue
-import services.NrsService
+import uk.gov.hmrc.auth.core.AuthConnector
+import uk.gov.hmrc.auth.core.authorise.Predicate
+import uk.gov.hmrc.auth.core.retrieve.Retrieval
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockNrsService extends MockFactory {
+trait MockAuthConnector extends MockFactory {
 
-  val mockNrsService: NrsService = mock[NrsService]
+  val mockAuthConnector: AuthConnector = mock[AuthConnector]
 
-  object MockNrsService {
+  object MockAuthConnector {
 
-    def submit(identifier: String, notableEvent: String, body: JsValue, nrsId: String, dateTime: DateTime): CallHandler[Future[Unit]] = {
-      (mockNrsService
-        .submit(_: String, _: String, _: JsValue, _: String, _: DateTime)(_: UserRequest[_], _: HeaderCarrier, _: ExecutionContext, _: String))
-        .expects(identifier, *, *, *, *, *, *, *, *)
+    def authorised[A](predicate: Predicate, retrievals: Retrieval[A]): CallHandler[Future[A]] = {
+      (mockAuthConnector.authorise[A](_: Predicate, _: Retrieval[A])(_: HeaderCarrier, _: ExecutionContext))
+        .expects(predicate, retrievals, *, *)
     }
   }
 

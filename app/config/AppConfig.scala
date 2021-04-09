@@ -16,14 +16,17 @@
 
 package config
 
+import com.typesafe.config.Config
 import javax.inject.{Inject, Singleton}
-import play.api.Configuration
+import play.api.{ConfigLoader, Configuration}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import utils.Retrying
 
 import scala.concurrent.duration.{Duration, FiniteDuration}
 
 trait AppConfig {
+
+  def mtdIdBaseUrl: String
 
   def apiStatus(version: String): String
 
@@ -36,21 +39,23 @@ trait AppConfig {
   def appName: String
 
   def nrsBaseUrl: String
+
+  def confidenceLevelConfig: ConfidenceLevelConfig
 }
 
 @Singleton
 class AppConfigImpl @Inject()(config: ServicesConfig, configuration: Configuration) extends AppConfig {
 
+  val mtdIdBaseUrl: String = config.baseUrl("mtd-id-lookup")
   // NRS config items
   val nrsApiKey: String = config.getString("access-keys.xApiKey")
   val appName: String = config.getString("appName")
-
   val nrsBaseUrl: String = config.baseUrl("non-repudiation")
+
+  private val nrsConfig = configuration.get[Configuration]("microservice.services.non-repudiation")
 
   lazy val nrsRetries: List[FiniteDuration] =
     Retrying.fibonacciDelays(getFiniteDuration(nrsConfig, "initialDelay"), nrsConfig.get[Int]("numberOfRetries"))
-
-  private val nrsConfig = configuration.get[Configuration]("microservice.services.non-repudiation")
 
   private final def getFiniteDuration(config: Configuration, path: String): FiniteDuration = {
     val string = config.get[String](path)
@@ -64,5 +69,17 @@ class AppConfigImpl @Inject()(config: ServicesConfig, configuration: Configurati
   def apiStatus(version: String): String = config.getString(s"api.$version.status")
 
   def featureSwitch: Option[Configuration] = configuration.getOptional[Configuration](s"feature-switch")
+
+  val confidenceLevelConfig: ConfidenceLevelConfig = configuration.get[ConfidenceLevelConfig](s"api.confidence-level-check")
 }
 
+case class ConfidenceLevelConfig(definitionEnabled: Boolean, authValidationEnabled: Boolean)
+object ConfidenceLevelConfig {
+  implicit val configLoader: ConfigLoader[ConfidenceLevelConfig] = (rootConfig: Config, path: String) => {
+    val config = rootConfig.getConfig(path)
+    ConfidenceLevelConfig(
+      definitionEnabled = config.getBoolean("definition.enabled"),
+      authValidationEnabled = config.getBoolean("auth-validation.enabled")
+    )
+  }
+}

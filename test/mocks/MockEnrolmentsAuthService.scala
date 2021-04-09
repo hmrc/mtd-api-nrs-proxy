@@ -16,26 +16,28 @@
 
 package mocks
 
-import controllers.UserRequest
-import org.joda.time.DateTime
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import play.api.libs.json.JsValue
-import services.NrsService
+import services.{AuthOutcome, EnrolmentsAuthService}
+import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockNrsService extends MockFactory {
+trait MockEnrolmentsAuthService extends MockFactory {
 
-  val mockNrsService: NrsService = mock[NrsService]
+  val mockEnrolmentsAuthService: EnrolmentsAuthService = mock[EnrolmentsAuthService]
 
-  object MockNrsService {
+  object MockEnrolmentsAuthService {
 
-    def submit(identifier: String, notableEvent: String, body: JsValue, nrsId: String, dateTime: DateTime): CallHandler[Future[Unit]] = {
-      (mockNrsService
-        .submit(_: String, _: String, _: JsValue, _: String, _: DateTime)(_: UserRequest[_], _: HeaderCarrier, _: ExecutionContext, _: String))
-        .expects(identifier, *, *, *, *, *, *, *, *)
+    def authoriseUser(): CallHandler[Future[AuthOutcome]] = {
+      (mockEnrolmentsAuthService.authorised(_: Predicate)(_: HeaderCarrier, _: ExecutionContext))
+        .expects(*, *, *)
+    }
+
+    def authorised(predicate: Predicate): CallHandler[Future[AuthOutcome]] = {
+      (mockEnrolmentsAuthService.authorised(_: Predicate)(_: HeaderCarrier, _: ExecutionContext))
+        .expects(predicate, *, *)
     }
   }
 

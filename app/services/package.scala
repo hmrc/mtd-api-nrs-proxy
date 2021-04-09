@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
+import models.auth.UserDetails
 import models.errors.MtdError
-import models.response.{NrsFailure, NrsResponse}
 
-package object connectors {
+package object services {
 
-  type MtdIdLookupOutcome = Either[MtdError, String]
-  type NrsOutcome = Either[NrsFailure, NrsResponse]
+  type AuthOutcome = Either[MtdError, UserDetails]
 }

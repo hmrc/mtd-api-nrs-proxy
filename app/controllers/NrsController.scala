@@ -19,21 +19,22 @@ package controllers
 import javax.inject.{Inject, Singleton}
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
-import services.NrsService
-import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
+import services.{EnrolmentsAuthService, MtdIdLookupService, NrsService}
 import utils.{CurrentDateTime, IdGenerator, Logging}
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class NrsController @Inject()(nrsService: NrsService,
+class NrsController @Inject()(val authService: EnrolmentsAuthService,
+                              val lookupService: MtdIdLookupService,
+                              nrsService: NrsService,
                               val idGenerator: IdGenerator,
                               dateTime: CurrentDateTime,
                               cc: ControllerComponents)(implicit ec: ExecutionContext)
-  extends BackendController(cc) with Logging {
+  extends AuthorisedController(cc) with Logging {
 
-  def submit(nino: String, notableEvent: String): Action[JsValue] =
-    Action.async(parse.json) { implicit request =>
+  def submit(identifier: String, notableEvent: String): Action[JsValue] =
+    authorisedAction(identifier).async(parse.json) { implicit request =>
 
       implicit val correlationId: String = idGenerator.getUid
       val nrsId = idGenerator.getUid
@@ -41,7 +42,7 @@ class NrsController @Inject()(nrsService: NrsService,
 
       logger.info(s"[NrsController] [submit] NRS submission request received for $notableEvent")
 
-      nrsService.submit(nino, notableEvent, request.body, nrsId, submissionTimestamp)
+      nrsService.submit(identifier, notableEvent, request.body, nrsId, submissionTimestamp)
           Future.successful(Ok)
     }
 }

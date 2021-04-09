@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import models.errors.MtdError
-import models.response.{NrsFailure, NrsResponse}
+package models.auth
 
-package object connectors {
+import models.request.IdentityData
 
-  type MtdIdLookupOutcome = Either[MtdError, String]
-  type NrsOutcome = Either[NrsFailure, NrsResponse]
-}
+case class UserDetails(enrolmentIdentifier: String,
+                       userType: String,
+                       agentReferenceNumber: Option[String],
+                       identityData: Option[IdentityData] = None)

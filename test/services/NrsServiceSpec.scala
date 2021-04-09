@@ -17,12 +17,15 @@
 package services
 
 import com.kenshoo.play.metrics.Metrics
+import controllers.UserRequest
 import mocks.{MockMetrics, MockNrsConnector}
+import models.auth.UserDetails
 import models.request.{Metadata, NrsSubmission, SearchKeys}
 import models.response.{NrsFailure, NrsResponse}
 import org.joda.time.DateTime
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
+import utils.NrsTestData.IdentityDataTestData
 import utils.MockHashUtil
 
 import scala.concurrent.Future
@@ -56,7 +59,7 @@ class NrsServiceSpec extends ServiceSpec {
         payloadContentType = "application/json",
         payloadSha256Checksum = checksum,
         userSubmissionTimestamp = timestamp,
-        identityData = None,
+        identityData = Some(IdentityDataTestData.correctModel),
         userAuthToken = "Bearer aaaa",
         headerData = Json.toJson(Map(
           "Host" -> "localhost",
@@ -76,11 +79,21 @@ class NrsServiceSpec extends ServiceSpec {
 
   trait Test extends MockNrsConnector with MockHashUtil {
 
-    implicit val request: FakeRequest[_] = FakeRequest().withHeaders(
+    implicit val userRequest: UserRequest[_] =
+      UserRequest(
+        userDetails =
+          UserDetails(
+            enrolmentIdentifier = "id",
+            userType = "Individual",
+            agentReferenceNumber = None,
+            identityData = Some(IdentityDataTestData.correctModel)
+          ),
+        request = FakeRequest().withHeaders(
           "Authorization" -> "Bearer aaaa",
           "dummyHeader1" -> "dummyValue1",
           "dummyHeader2" -> "dummyValue2"
         )
+      )
 
     val service: NrsService = new NrsService(
       mockNrsConnector,
@@ -99,7 +112,7 @@ class NrsServiceSpec extends ServiceSpec {
         MockedHashUtil.encode(submitRequestBodyString.toString()).returns(encodedString)
         MockedHashUtil.getHash(submitRequestBodyString.toString()).returns(checksum)
 
-        await(service.submit(nino, notableEvent, submitRequestBodyString, nrsId, timestamp)) shouldBe Some(NrsResponse("a5894863-9cd7-4d0d-9eee-301ae79cbae6"))
+        await(service.submit(nino, notableEvent, submitRequestBodyString, nrsId, timestamp)) shouldBe ((): Unit)
       }
     }
 
@@ -112,7 +125,7 @@ class NrsServiceSpec extends ServiceSpec {
         MockNrsConnector.submitNrs(nrsSubmission)
           .returns(Future.successful(Left(NrsFailure.ExceptionThrown)))
 
-        await(service.submit(nino, notableEvent, submitRequestBodyString, nrsId, timestamp)) shouldBe None
+        await(service.submit(nino, notableEvent, submitRequestBodyString, nrsId, timestamp)) shouldBe ((): Unit)
       }
     }
   }

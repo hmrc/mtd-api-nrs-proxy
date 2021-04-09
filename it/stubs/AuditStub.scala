@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,19 @@
  * limitations under the License.
  */
 
-import models.errors.MtdError
-import models.response.{NrsFailure, NrsResponse}
+package stubs
 
-package object connectors {
+import com.github.tomakehurst.wiremock.stubbing.StubMapping
+import play.api.http.Status._
+import support.WireMockMethods
 
-  type MtdIdLookupOutcome = Either[MtdError, String]
-  type NrsOutcome = Either[NrsFailure, NrsResponse]
+object AuditStub extends WireMockMethods {
+
+  private val auditUri: String = s"/write/audit.*"
+
+  def audit(): StubMapping = {
+    when(method = POST, uri = auditUri)
+      .thenReturn(status = NO_CONTENT)
+  }
+
 }

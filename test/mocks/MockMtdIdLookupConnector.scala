@@ -16,26 +16,21 @@
 
 package mocks
 
-import controllers.UserRequest
-import org.joda.time.DateTime
+import connectors.{MtdIdLookupConnector, MtdIdLookupOutcome}
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import play.api.libs.json.JsValue
-import services.NrsService
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockNrsService extends MockFactory {
+trait MockMtdIdLookupConnector extends MockFactory {
 
-  val mockNrsService: NrsService = mock[NrsService]
+  val mockMtdIdLookupConnector: MtdIdLookupConnector = mock[MtdIdLookupConnector]
 
-  object MockNrsService {
-
-    def submit(identifier: String, notableEvent: String, body: JsValue, nrsId: String, dateTime: DateTime): CallHandler[Future[Unit]] = {
-      (mockNrsService
-        .submit(_: String, _: String, _: JsValue, _: String, _: DateTime)(_: UserRequest[_], _: HeaderCarrier, _: ExecutionContext, _: String))
-        .expects(identifier, *, *, *, *, *, *, *, *)
+  object MockedMtdIdLookupConnector {
+    def lookup(nino: String): CallHandler[Future[MtdIdLookupOutcome]] = {
+      (mockMtdIdLookupConnector.getMtdId(_: String)(_: HeaderCarrier, _: ExecutionContext))
+        .expects(nino, *, *)
     }
   }
 

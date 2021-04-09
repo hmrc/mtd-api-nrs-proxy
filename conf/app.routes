@@ -1,3 +1,3 @@
 # microservice specific routes
 
-POST        /:nino/:notableEvent       controllers.NrsController.submit(nino: String, notableEvent: String)
+POST        /:identifier/:notableEvent       controllers.NrsController.submit(identifier: String, notableEvent: String)

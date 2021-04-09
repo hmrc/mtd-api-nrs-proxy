@@ -14,11 +14,21 @@
  * limitations under the License.
  */
 
-import models.errors.MtdError
-import models.response.{NrsFailure, NrsResponse}
+package connectors
 
-package object connectors {
+import config.AppConfig
+import javax.inject.{Inject, Singleton}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 
-  type MtdIdLookupOutcome = Either[MtdError, String]
-  type NrsOutcome = Either[NrsFailure, NrsResponse]
+import scala.concurrent.{ExecutionContext, Future}
+
+@Singleton
+class MtdIdLookupConnector @Inject()(http: HttpClient,
+                                     appConfig: AppConfig) {
+
+  def getMtdId(nino: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[MtdIdLookupOutcome] = {
+    import connectors.httpparsers.MtdIdLookupHttpParser.mtdIdLookupHttpReads
+
+    http.GET[MtdIdLookupOutcome](s"${appConfig.mtdIdBaseUrl}/mtd-identifier-lookup/nino/$nino")
+  }
 }
