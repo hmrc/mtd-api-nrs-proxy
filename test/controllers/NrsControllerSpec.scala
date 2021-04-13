@@ -115,32 +115,6 @@ class NrsControllerSpec
           status(result) shouldBe INTERNAL_SERVER_ERROR
         }
       }
-
-      "return status 200 for a VAT request" when {
-        "auth call is successful" in new Test {
-
-          setUpMocks()
-          MockEnrolmentsAuthService.authoriseUser().returns(Future.successful(Right(UserDetails("id", "Individual", None, None))))
-          MockNrsService
-            .submit(vrn, notableEvent, submitRequestBodyJson, uid, date)
-            .returns(Future.successful((): Unit))
-
-          private val result: Future[Result] = controller.submit(vrn, "submit")(fakePostRequest(submitRequestBodyJson))
-
-          status(result) shouldBe OK
-        }
-      }
-
-      "return status 500 for a vat request" when {
-        "auth call is failed" in new Test {
-
-          MockEnrolmentsAuthService.authoriseUser().returns(Future.successful(Left(DownstreamError)))
-
-          private val result: Future[Result] = controller.submit(vrn, "submit")(fakePostRequest(submitRequestBodyJson))
-
-          status(result) shouldBe INTERNAL_SERVER_ERROR
-        }
-      }
     }
   }
 }

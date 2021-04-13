@@ -23,7 +23,6 @@ import play.api.mvc._
 import services.{EnrolmentsAuthService, MtdIdLookupService}
 import uk.gov.hmrc.auth.core.Enrolment
 import uk.gov.hmrc.auth.core.authorise.Predicate
-import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
@@ -56,34 +55,13 @@ abstract class AuthorisedController(cc: ControllerComponents)(implicit ec: Execu
       }
     }
 
-    def invokeBlockWithAuthCheckForVAT[A](vrn: String, request: Request[A], block: UserRequest[A] => Future[Result])(
-      implicit headerCarrier: HeaderCarrier): Future[Result] = {
-
-      val predicate: Predicate =
-        Enrolment("HMRC-MTD-VAT")
-          .withIdentifier("VRN", vrn)
-          .withDelegatedAuthRule("mtd-vat-auth")
-
-      val clientId = request.headers.get("X-Client-Id").getOrElse("N/A")
-
-      authService.authorised(predicate).flatMap[Result] {
-        case Right(userDetails)      => block(UserRequest(userDetails.copy(enrolmentIdentifier = clientId), request))
-        case Left(_)                 => Future.successful(InternalServerError(Json.toJson(DownstreamError)))
-      }
-    }
-
     override def invokeBlock[A](request: Request[A], block: UserRequest[A] => Future[Result]): Future[Result] = {
 
       implicit val headerCarrier: HeaderCarrier = hc(request)
 
-      if(Nino.isValid(identifier)) {
-        lookupService.lookup(identifier).flatMap[Result] {
-          case Right(mtdId) => invokeBlockWithAuthCheckForSA(mtdId, request, block)
-          case Left(_) => Future.successful(InternalServerError(Json.toJson(DownstreamError)))
-        }
-      }
-      else {
-        invokeBlockWithAuthCheckForVAT(identifier, request, block)
+      lookupService.lookup(identifier).flatMap[Result] {
+        case Right(mtdId) => invokeBlockWithAuthCheckForSA(mtdId, request, block)
+        case Left(_) => Future.successful(InternalServerError(Json.toJson(DownstreamError)))
       }
     }
   }
