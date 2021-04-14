@@ -20,7 +20,7 @@ import org.joda.time.LocalDate
 import play.api.libs.json.{Format, Json, OFormat}
 import utils.DateUtils
 
-case class SearchKeys(nino: Option[String] = None,
+case class SearchKeys(identifier: Option[String] = None,
                       companyName: Option[String] = None,
                       taxPeriodEndDate: Option[LocalDate] = None,
                       periodKey: Option[String] = None

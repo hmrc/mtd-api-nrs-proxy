@@ -51,6 +51,7 @@ object NrsTestData {
         |    "sessionId": "SessionId" },
         |  "itmpName" : {},
         |  "itmpAddress" : {},
+        |  "itmpDateOfBirth" : "1985-01-01",
         |  "affinityGroup": "Agent",
         |  "credentialStrength": "strong",
         |  "loginTimes": {
@@ -77,7 +78,7 @@ object NrsTestData {
       credentialRole = Some(User),
       mdtpInformation = Some(MdtpInformation("DeviceId", "SessionId")),
       itmpName = ItmpName(None, None, None),
-      itmpDateOfBirth = None,
+      itmpDateOfBirth = Some(LocalDate.parse("1985-01-01")),
       itmpAddress = ItmpAddress(None, None, None, None, None, None, None, None),
       affinityGroup = Some(Agent),
       credentialStrength = Some("strong"),
@@ -110,7 +111,7 @@ object NrsTestData {
          |      "Gov-Client-Colour-Depth": "24"
          |    },
          |    "searchKeys": {
-         |      "nino": "123456789",
+         |      "identifier": "123456789",
          |      "periodKey": "18AA"
          |    }
          |}
@@ -138,7 +139,7 @@ object NrsTestData {
       )),
       searchKeys =
         SearchKeys(
-          nino = Some("123456789"),
+          identifier = Some("123456789"),
           companyName = None,
           periodKey = Some("18AA"),
           taxPeriodEndDate = None
@@ -148,7 +149,7 @@ object NrsTestData {
 
   object SearchKeysTestData {
     val correctJson: JsObject = Json.obj(
-      "nino" -> "nino",
+      "identifier" -> "identifier",
       "companyName" -> "Good, Bad & Ugly Ltd",
       "taxPeriodEndDate" -> "2018-06-04",
       "periodKey" -> "period key"
@@ -156,7 +157,7 @@ object NrsTestData {
 
     val correctModel: SearchKeys =
       SearchKeys(
-        nino = Some("nino"),
+        identifier = Some("identifier"),
         companyName = Some("Good, Bad & Ugly Ltd"),
         taxPeriodEndDate = Some(LocalDate.parse("2018-06-04")),
         periodKey = Some("period key")

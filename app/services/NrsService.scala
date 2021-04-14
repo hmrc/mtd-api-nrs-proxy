@@ -76,7 +76,7 @@ class NrsService @Inject()(connector: NrsConnector,
         headerData = Json.toJson(request.headers.toMap.map { h => h._1 -> h._2.head }),
         searchKeys =
           SearchKeys(
-            nino = Some(identifier),
+            identifier = Some(identifier),
             companyName = None
           )
       )

@@ -18,7 +18,7 @@ package fixtures
 
 import models.auth.UserDetails
 import models.request.IdentityData
-import org.joda.time.DateTime
+import org.joda.time.{DateTime, LocalDate}
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.retrieve._
 
@@ -153,8 +153,8 @@ object AuthFixture {
     agentId = Some("987654321")
   ))
 
-  val authResponse: (IdentityData, Enrolments) => Option[AffinityGroup] ~ Enrolments ~ Option[String] ~ Option[String] ~ Option[String] ~ Option[Credentials] ~ ConfidenceLevel ~ None.type ~ None.type ~ Option[Name] ~ None.type ~ Option[String] ~ AgentInformation ~ Option[String] ~ Option[CredentialRole] ~ None.type ~ Option[String] ~ LoginTimes =
-    (data, enrolments) => new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(
+  val authResponse: (IdentityData, Enrolments) => Option[AffinityGroup] ~ Enrolments ~ Option[String] ~ Option[String] ~ Option[String] ~ Option[Credentials] ~ ConfidenceLevel ~ None.type ~ None.type ~ Option[Name] ~ None.type ~ Option[String] ~ AgentInformation ~ Option[String] ~ Option[CredentialRole] ~ None.type ~ Option[String] ~ LoginTimes ~ Option[ItmpName] ~ Option[LocalDate] ~ Option[ItmpAddress] =
+    (data, enrolments) => new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(
       data.affinityGroup,
       enrolments),
       data.internalId),
@@ -172,7 +172,10 @@ object AuthFixture {
       data.credentialRole),
       None),
       data.credentialStrength),
-      data.loginTimes
+      data.loginTimes),
+      Some(data.itmpName)),
+      data.itmpDateOfBirth),
+      Some(data.itmpAddress)
     )
 
   val userDetails: (AffinityGroup, AgentInformation) => UserDetails = (Individual, agentInformation) => UserDetails(userType = Individual.toString,
