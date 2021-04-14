@@ -51,6 +51,7 @@ object NrsTestData {
         |    "sessionId": "SessionId" },
         |  "itmpName" : {},
         |  "itmpAddress" : {},
+        |  "itmpDateOfBirth" : "1985-01-01",
         |  "affinityGroup": "Agent",
         |  "credentialStrength": "strong",
         |  "loginTimes": {
@@ -77,7 +78,7 @@ object NrsTestData {
       credentialRole = Some(User),
       mdtpInformation = Some(MdtpInformation("DeviceId", "SessionId")),
       itmpName = ItmpName(None, None, None),
-      itmpDateOfBirth = None,
+      itmpDateOfBirth = Some(LocalDate.parse("1985-01-01")),
       itmpAddress = ItmpAddress(None, None, None, None, None, None, None, None),
       affinityGroup = Some(Agent),
       credentialStrength = Some("strong"),
