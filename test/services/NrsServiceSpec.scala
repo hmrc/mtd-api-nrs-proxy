@@ -69,7 +69,7 @@ class NrsServiceSpec extends ServiceSpec {
         )),
         searchKeys =
           SearchKeys(
-            nino = Some(nino),
+            identifier = Some(nino),
             companyName = None,
             periodKey = None,
             taxPeriodEndDate = None
