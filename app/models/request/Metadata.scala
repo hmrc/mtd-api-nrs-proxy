@@ -17,11 +17,10 @@
 package models.request
 
 import org.joda.time.DateTime
-import play.api.libs.json.{Format, JsValue, Json, OFormat}
+import play.api.libs.json.{Format, JsValue, Json, OFormat, OWrites}
 import utils.DateUtils
 
-case class Metadata(
-                    businessId: String,
+case class Metadata(businessId: String,
                     notableEvent: String,
                     payloadContentType: String,
                     payloadSha256Checksum: String,
@@ -34,5 +33,5 @@ case class Metadata(
 object Metadata {
   implicit val idformat: OFormat[IdentityData] = IdentityData.format
   implicit val dateFormats: Format[DateTime] = DateUtils.isoInstantDateFormat
-  implicit val format: OFormat[Metadata] = Json.format[Metadata]
+  implicit val writes: OWrites[Metadata] = Json.writes[Metadata]
 }

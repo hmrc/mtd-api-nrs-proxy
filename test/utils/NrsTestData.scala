@@ -16,7 +16,7 @@
 
 package utils
 
-import models.request.{IdentityData, Metadata, NrsSubmission, SearchKeys}
+import models.request.{IdentityData, Metadata, NINO, NrsSubmission, SearchKeys, VRN}
 import org.joda.time.{DateTime, DateTimeZone, LocalDate}
 import play.api.libs.json.{JsObject, JsValue, Json}
 import uk.gov.hmrc.auth.core.AffinityGroup.Agent
@@ -111,7 +111,7 @@ object NrsTestData {
          |      "Gov-Client-Colour-Depth": "24"
          |    },
          |    "searchKeys": {
-         |      "identifier": "123456789",
+         |      "vrn": "123456789",
          |      "periodKey": "18AA"
          |    }
          |}
@@ -139,7 +139,7 @@ object NrsTestData {
       )),
       searchKeys =
         SearchKeys(
-          identifier = Some("123456789"),
+          identifier = Some(VRN("123456789")),
           companyName = None,
           periodKey = Some("18AA"),
           taxPeriodEndDate = None
@@ -149,7 +149,7 @@ object NrsTestData {
 
   object SearchKeysTestData {
     val correctJson: JsObject = Json.obj(
-      "identifier" -> "identifier",
+      "nino" -> "identifier",
       "companyName" -> "Good, Bad & Ugly Ltd",
       "taxPeriodEndDate" -> "2018-06-04",
       "periodKey" -> "period key"
@@ -157,7 +157,7 @@ object NrsTestData {
 
     val correctModel: SearchKeys =
       SearchKeys(
-        identifier = Some("identifier"),
+        identifier = Some(NINO("identifier")),
         companyName = Some("Good, Bad & Ugly Ltd"),
         taxPeriodEndDate = Some(LocalDate.parse("2018-06-04")),
         periodKey = Some("period key")

@@ -17,16 +17,29 @@
 package models.request
 
 import org.joda.time.LocalDate
-import play.api.libs.json.{Format, Json, OFormat}
+import play.api.libs.json._
 import utils.DateUtils
 
-case class SearchKeys(identifier: Option[String] = None,
+case class SearchKeys(identifier: Option[Identifier] = None,
                       companyName: Option[String] = None,
                       taxPeriodEndDate: Option[LocalDate] = None,
-                      periodKey: Option[String] = None
-                     )
+                      periodKey: Option[String] = None)
 
 object SearchKeys {
   implicit val dateFormats: Format[LocalDate] = DateUtils.dateFormat
-  implicit val format: OFormat[SearchKeys] = Json.format[SearchKeys]
+
+  implicit val writes: OWrites[SearchKeys] = (o: SearchKeys) => JsObject.apply(
+    o.identifier.fold(Seq.empty[(String, JsValue)])(
+      identifier => Seq(identifier.identifierName -> Json.toJson(identifier.identifierValue))
+    ) ++
+      o.companyName.fold(Seq.empty[(String, JsValue)])(
+        companyName => Seq("companyName" -> Json.toJson(companyName))
+      ) ++
+      o.taxPeriodEndDate.fold(Seq.empty[(String, JsValue)])(
+        taxPeriodEndDate => Seq("taxPeriodEndDate" -> Json.toJson(taxPeriodEndDate))
+      ) ++
+      o.periodKey.fold(Seq.empty[(String, JsValue)])(
+        periodKey => Seq("periodKey" -> Json.toJson(periodKey))
+      )
+  )
 }
