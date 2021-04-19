@@ -18,7 +18,7 @@ package models.request
 
 import play.api.libs.json.{JsValue, Json}
 
-trait Identifier {
+protected trait Identifier {
   val identifierName: String
   val identifierValue: String
 
