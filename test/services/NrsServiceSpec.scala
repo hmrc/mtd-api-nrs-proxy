@@ -20,7 +20,7 @@ import com.kenshoo.play.metrics.Metrics
 import controllers.UserRequest
 import mocks.{MockMetrics, MockNrsConnector}
 import models.auth.UserDetails
-import models.request.{Metadata, NrsSubmission, SearchKeys}
+import models.request.{Metadata, NINO, NrsSubmission, SearchKeys}
 import models.response.{NrsFailure, NrsResponse}
 import org.joda.time.DateTime
 import play.api.libs.json.Json
@@ -34,7 +34,7 @@ class NrsServiceSpec extends ServiceSpec {
 
   val metrics: Metrics = new MockMetrics
 
-  private val nino: String = "123456789"
+  private val nino: String = "AA111111A"
   private val notableEvent: String = "submit"
 
   private val timestamp: DateTime = DateTime.parse("2018-04-07T12:13:25.156Z")
@@ -69,7 +69,7 @@ class NrsServiceSpec extends ServiceSpec {
         )),
         searchKeys =
           SearchKeys(
-            identifier = Some(nino),
+            identifier = Some(NINO(nino)),
             companyName = None,
             periodKey = None,
             taxPeriodEndDate = None

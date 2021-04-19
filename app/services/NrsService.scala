@@ -19,8 +19,9 @@ package services
 import com.kenshoo.play.metrics.Metrics
 import connectors.NrsConnector
 import controllers.UserRequest
+
 import javax.inject.{Inject, Singleton}
-import models.request.{Metadata, NrsSubmission, SearchKeys}
+import models.request.{Metadata, NINO, NrsSubmission, SearchKeys}
 import org.joda.time.DateTime
 import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -39,7 +40,7 @@ class NrsService @Inject()(connector: NrsConnector,
     ec: ExecutionContext,
     correlationId: String): Future[Unit] = {
 
-    val nrsSubmission = buildNrsSubmission(identifier, notableEvent, body, submissionTimestamp, request)
+    val nrsSubmission = buildItsaNrsSubmission(identifier, notableEvent, body, submissionTimestamp, request)
 
     timeFuture("NRS Submission", "nrs.submission") {
       connector.submit(nrsSubmission).map {
@@ -53,11 +54,11 @@ class NrsService @Inject()(connector: NrsConnector,
     }
   }
 
-  def buildNrsSubmission(identifier: String,
-                         notableEvent: String,
-                         body: JsValue,
-                         submissionTimestamp: DateTime,
-                         request: UserRequest[_]): NrsSubmission = {
+  def buildItsaNrsSubmission(identifier: String,
+                             notableEvent: String,
+                             body: JsValue,
+                             submissionTimestamp: DateTime,
+                             request: UserRequest[_]): NrsSubmission = {
 
     val payloadString = body.toString()
     val encodedPayload = hashUtil.encode(payloadString)
@@ -76,7 +77,7 @@ class NrsService @Inject()(connector: NrsConnector,
         headerData = Json.toJson(request.headers.toMap.map { h => h._1 -> h._2.head }),
         searchKeys =
           SearchKeys(
-            identifier = Some(identifier),
+            identifier = Some(NINO(identifier)),
             companyName = None
           )
       )

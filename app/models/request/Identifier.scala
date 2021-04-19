@@ -16,19 +16,19 @@
 
 package models.request
 
-import play.api.libs.json.{JsObject, Json}
-import support.UnitSpec
-import utils.NrsTestData.SearchKeysTestData._
+import play.api.libs.json.{JsValue, Json}
 
-class SearchKeysSpec extends UnitSpec {
+trait Identifier {
+  val identifierName: String
+  val identifierValue: String
 
-  "writes" should {
-    "parse correctly to json" in {
-      Json.toJson(correctModel) shouldBe correctJson
-    }
+  val toJson: JsValue = Json.toJson(s"""$identifierName: $identifierValue""")
+}
 
-    "not write fields if they are empty" in {
-      Json.toJson(SearchKeys()) shouldBe JsObject.empty
-    }
-  }
+case class NINO(identifierValue: String) extends Identifier {
+  val identifierName: String = "nino"
+}
+
+case class VRN(identifierValue: String) extends Identifier {
+  val identifierName: String = "vrn"
 }
