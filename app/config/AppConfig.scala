@@ -48,14 +48,14 @@ class AppConfigImpl @Inject()(config: ServicesConfig, configuration: Configurati
 
   val mtdIdBaseUrl: String = config.baseUrl("mtd-id-lookup")
   // NRS config items
-  val nrsApiKey: String = config.getString("access-keys.xApiKey")
   val appName: String = config.getString("appName")
   val nrsBaseUrl: String = config.baseUrl("non-repudiation")
-
   private val nrsConfig = configuration.get[Configuration]("microservice.services.non-repudiation")
 
   lazy val nrsRetries: List[FiniteDuration] =
     Retrying.fibonacciDelays(getFiniteDuration(nrsConfig, "initialDelay"), nrsConfig.get[Int]("numberOfRetries"))
+
+  val nrsApiKey: String = nrsConfig.get[String]("x-api-key")
 
   private final def getFiniteDuration(config: Configuration, path: String): FiniteDuration = {
     val string = config.get[String](path)
