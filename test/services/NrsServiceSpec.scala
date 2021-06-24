@@ -112,7 +112,7 @@ class NrsServiceSpec extends ServiceSpec {
         MockedHashUtil.encode(submitRequestBodyString.toString()).returns(encodedString)
         MockedHashUtil.getHash(submitRequestBodyString.toString()).returns(checksum)
 
-        await(service.submit(nino, notableEvent, submitRequestBodyString, nrsId, timestamp)) shouldBe ((): Unit)
+        await(service.submit(nino, notableEvent, submitRequestBodyString, timestamp)) shouldBe ((): Unit)
       }
     }
 
@@ -125,7 +125,7 @@ class NrsServiceSpec extends ServiceSpec {
         MockNrsConnector.submitNrs(nrsSubmission)
           .returns(Future.successful(Left(NrsFailure.ExceptionThrown)))
 
-        await(service.submit(nino, notableEvent, submitRequestBodyString, nrsId, timestamp)) shouldBe ((): Unit)
+        await(service.submit(nino, notableEvent, submitRequestBodyString, timestamp)) shouldBe ((): Unit)
       }
     }
   }

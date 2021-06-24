@@ -34,7 +34,7 @@ class NrsService @Inject()(connector: NrsConnector,
                            hashUtil: HashUtil,
                            override val metrics: Metrics) extends Timer with Logging {
 
-  def submit(identifier: String, notableEvent: String, body: JsValue, generatedNrsId: String, submissionTimestamp: DateTime)(
+  def submit(identifier: String, notableEvent: String, body: JsValue, submissionTimestamp: DateTime)(
     implicit request: UserRequest[_],
     hc: HeaderCarrier,
     ec: ExecutionContext,

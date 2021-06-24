@@ -37,12 +37,11 @@ class NrsController @Inject()(val authService: EnrolmentsAuthService,
     authorisedAction(identifier).async(parse.json) { implicit request =>
 
       implicit val correlationId: String = idGenerator.getUid
-      val nrsId = idGenerator.getUid
       val submissionTimestamp = dateTime.getDateTime
 
       logger.info(s"[NrsController] [submit] NRS submission request received for $notableEvent")
 
-      nrsService.submit(identifier, notableEvent, request.body, nrsId, submissionTimestamp)
+      nrsService.submit(identifier, notableEvent, request.body, submissionTimestamp)
           Future.successful(Ok)
     }
 }
