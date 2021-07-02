@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,11 +25,6 @@ object NrsStub extends WireMockMethods {
   def onSuccess(method: HTTPMethod, uri: String, status: Int, body: JsValue): StubMapping = {
     when(method = method, uri = uri)
       .thenReturnWithHeaders(status = status, headers, body)
-  }
-
-  def onError(method: HTTPMethod, uri: String, errorStatus: Int, errorBody: String): StubMapping = {
-    when(method = method, uri = uri)
-      .thenReturn(status = errorStatus, errorBody)
   }
 
   private val headers = Map("Content-Type" -> "application/json", "Receipt-Id" -> "de1249ad-c242-4f22-9fe6-f357b1bfcccf",

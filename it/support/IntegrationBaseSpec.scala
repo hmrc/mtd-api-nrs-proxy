@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,7 @@ package support
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.json.{JsValue, Json}
-import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
+import play.api.libs.ws.{WSClient, WSRequest}
 import play.api.{Application, Environment, Mode}
 
 trait IntegrationBaseSpec extends UnitSpec with WireMockHelper with GuiceOneServerPerSuite
@@ -63,6 +62,4 @@ trait IntegrationBaseSpec extends UnitSpec with WireMockHelper with GuiceOneServ
   }
 
   def buildRequest(path: String): WSRequest = client.url(s"http://localhost:$port$appRouteContext$path").withFollowRedirects(false)
-
-  def document(response: WSResponse): JsValue = Json.parse(response.body)
 }

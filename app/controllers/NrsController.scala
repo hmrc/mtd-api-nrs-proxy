@@ -36,7 +36,10 @@ class NrsController @Inject()(val authService: EnrolmentsAuthService,
   def submit(identifier: String, notableEvent: String): Action[JsValue] =
     authorisedAction(identifier).async(parse.json) { implicit request =>
 
-      implicit val correlationId: String = idGenerator.getUid
+      implicit val correlationId: String = request.headers.get("CorrelationId") match {
+        case None => idGenerator.getUid
+        case Some(id) => id
+      }
       val nrsId = idGenerator.getUid
       val submissionTimestamp = dateTime.getDateTime
 

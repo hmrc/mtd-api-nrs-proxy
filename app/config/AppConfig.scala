@@ -16,9 +16,8 @@
 
 package config
 
-import com.typesafe.config.Config
 import javax.inject.{Inject, Singleton}
-import play.api.{ConfigLoader, Configuration}
+import play.api.Configuration
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import utils.Retrying
 
@@ -39,8 +38,6 @@ trait AppConfig {
   def appName: String
 
   def nrsBaseUrl: String
-
-  def confidenceLevelConfig: ConfidenceLevelConfig
 }
 
 @Singleton
@@ -53,11 +50,11 @@ class AppConfigImpl @Inject()(config: ServicesConfig, configuration: Configurati
   private val nrsConfig = configuration.get[Configuration]("microservice.services.non-repudiation")
 
   lazy val nrsRetries: List[FiniteDuration] =
-    Retrying.fibonacciDelays(getFiniteDuration(nrsConfig, "initialDelay"), nrsConfig.get[Int]("numberOfRetries"))
+    Retrying.fibonacciDelays(getFiniteDuration(nrsConfig), nrsConfig.get[Int]("numberOfRetries"))
 
   val nrsApiKey: String = nrsConfig.get[String]("x-api-key")
 
-  private final def getFiniteDuration(config: Configuration, path: String): FiniteDuration = {
+  private final def getFiniteDuration(config: Configuration, path: String = "initialDelay"): FiniteDuration = {
     val string = config.get[String](path)
 
     Duration.create(string) match {
@@ -69,17 +66,5 @@ class AppConfigImpl @Inject()(config: ServicesConfig, configuration: Configurati
   def apiStatus(version: String): String = config.getString(s"api.$version.status")
 
   def featureSwitch: Option[Configuration] = configuration.getOptional[Configuration](s"feature-switch")
-
-  val confidenceLevelConfig: ConfidenceLevelConfig = configuration.get[ConfidenceLevelConfig](s"api.confidence-level-check")
 }
 
-case class ConfidenceLevelConfig(definitionEnabled: Boolean, authValidationEnabled: Boolean)
-object ConfidenceLevelConfig {
-  implicit val configLoader: ConfigLoader[ConfidenceLevelConfig] = (rootConfig: Config, path: String) => {
-    val config = rootConfig.getConfig(path)
-    ConfidenceLevelConfig(
-      definitionEnabled = config.getBoolean("definition.enabled"),
-      authValidationEnabled = config.getBoolean("auth-validation.enabled")
-    )
-  }
-}

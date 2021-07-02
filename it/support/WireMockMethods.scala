@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,10 +51,6 @@ trait WireMockMethods {
       thenReturnInternal(status, Map.empty, Some(stringBody))
     }
 
-    def thenReturn(status: Int, body: String): StubMapping = {
-      thenReturnInternal(status, Map.empty, Some(body))
-    }
-
     def thenReturn(status: Int, headers: Map[String, String] = Map.empty): StubMapping = {
       thenReturnInternal(status, headers, None)
     }
@@ -84,20 +80,12 @@ trait WireMockMethods {
     def wireMockMapping(pattern: UrlPattern): MappingBuilder
   }
 
-  case object PUT extends HTTPMethod {
-    override def wireMockMapping(pattern: UrlPattern): MappingBuilder = put(pattern)
-  }
-
   case object POST extends HTTPMethod {
     override def wireMockMapping(pattern: UrlPattern): MappingBuilder = post(pattern)
   }
 
   case object GET extends HTTPMethod {
     override def wireMockMapping(pattern: UrlPattern): MappingBuilder = get(pattern)
-  }
-
-  case object DELETE extends HTTPMethod {
-    override def wireMockMapping(pattern: UrlPattern): MappingBuilder = delete(pattern)
   }
 
 }

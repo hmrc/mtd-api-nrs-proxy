@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,21 +28,6 @@ object MtdIdLookupStub extends WireMockMethods {
   def ninoFound(nino: String): StubMapping = {
     when(method = GET, uri = lookupUrl(nino))
       .thenReturn(status = OK, body = Json.obj("mtdbsa" -> "12345678"))
-  }
-
-  def unauthorised(nino: String): StubMapping = {
-    when(method = GET, uri = lookupUrl(nino))
-      .thenReturn(status = FORBIDDEN, body = Json.obj())
-  }
-
-  def badRequest(nino: String): StubMapping = {
-    when(method = GET, uri = lookupUrl(nino))
-      .thenReturn(status = BAD_REQUEST, body = Json.obj())
-  }
-
-  def internalServerError(nino: String): StubMapping = {
-    when(method = GET, uri = lookupUrl(nino))
-      .thenReturn(status = INTERNAL_SERVER_ERROR, body = Json.obj())
   }
 
 }
