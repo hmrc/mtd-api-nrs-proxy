@@ -20,7 +20,6 @@ import play.api.libs.json.{Json, OWrites}
 
 case class MtdError(code: String, message: String)
 
-
 object MtdError {
   implicit val writes: OWrites[MtdError] = Json.writes[MtdError]
 
@@ -29,7 +28,6 @@ object MtdError {
 }
 
 object NinoFormatError extends MtdError("FORMAT_NINO", "The provided NINO is invalid")
-object TaxYearFormatError extends MtdError("FORMAT_TAX_YEAR", "The provided tax year is invalid")
 
 //Standard Errors
 object DownstreamError extends MtdError("INTERNAL_SERVER_ERROR", "An internal server error occurred")

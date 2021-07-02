@@ -44,6 +44,4 @@ trait WireMockHelper {
   }
 
   def stopWireMock(): Unit = wireMockServer.stop()
-
-  def resetWireMock(): Unit = WireMock.reset()
 }

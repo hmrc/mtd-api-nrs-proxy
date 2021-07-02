@@ -16,7 +16,7 @@
 
 package mocks
 
-import config.{AppConfig, ConfidenceLevelConfig}
+import config.AppConfig
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 
@@ -35,6 +35,5 @@ trait MockAppConfig extends MockFactory {
     def appName: CallHandler[String] = (mockAppConfig.appName _).expects()
     def nrsBaseUrl: CallHandler[String] = (mockAppConfig.nrsBaseUrl _).expects()
     def nrsRetries: CallHandler[List[FiniteDuration]] = (mockAppConfig.nrsRetries _).expects()
-    def confidenceLevelCheckEnabled: CallHandler[ConfidenceLevelConfig] = (mockAppConfig.confidenceLevelConfig _: () => ConfidenceLevelConfig).expects()
   }
 }
