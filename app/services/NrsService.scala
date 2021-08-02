@@ -43,7 +43,7 @@ class NrsService @Inject()(connector: NrsConnector,
     val nrsSubmission = buildItsaNrsSubmission(identifier, notableEvent, body, submissionTimestamp, request)
 
     timeFuture("NRS Submission", "nrs.submission") {
-      connector.submit(nrsSubmission).map {
+      connector.submit(nrsSubmission).flatMap {
         case Left(err) =>
         logger.info(s"Error occurred in NRS Submission :: $err")
         Future.successful((): Unit)
