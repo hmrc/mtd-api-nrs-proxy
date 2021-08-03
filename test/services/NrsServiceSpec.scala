@@ -30,7 +30,7 @@ import utils.MockHashUtil
 
 import scala.concurrent.Future
 
-class NrsServiceSpec extends ServiceSpec {
+class NrsServiceSpec extends ServiceSpec with MockNrsConnector with MockHashUtil {
 
   val metrics: Metrics = new MockMetrics
 
@@ -77,7 +77,7 @@ class NrsServiceSpec extends ServiceSpec {
       )
     )
 
-  trait Test extends MockNrsConnector with MockHashUtil {
+  trait Test {
 
     implicit val userRequest: UserRequest[_] =
       UserRequest(
