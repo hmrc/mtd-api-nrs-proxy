@@ -1,7 +1,7 @@
 .*
 
 !.gitignore
-
+!.scalafmt.conf
 .cache
 /.classpath
 db
@@ -34,3 +34,4 @@ tmp
 .idea_modules
 bin
 /.bsp
+
