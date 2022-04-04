@@ -31,47 +31,63 @@ import utils.Logging
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class EnrolmentsAuthService @Inject()(val connector: AuthConnector, val appConfig: AppConfig) extends Logging {
+class EnrolmentsAuthService @Inject() (val connector: AuthConnector, val appConfig: AppConfig) extends Logging {
 
   private val authFunction: AuthorisedFunctions = new AuthorisedFunctions {
     override def authConnector: AuthConnector = connector
   }
 
   def authorised(predicate: Predicate)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AuthOutcome] = {
-    authFunction.authorised(predicate).retrieve(affinityGroup and allEnrolments
-      and internalId and externalId and agentCode and credentials
-      and confidenceLevel and nino and saUtr and name and dateOfBirth
-      and email and agentInformation and groupIdentifier and credentialRole
-      and mdtpInformation and credentialStrength and loginTimes
-      and itmpName and itmpDateOfBirth and itmpAddress
-    ) {
-      case affGroup ~ enrolments ~ inId ~ exId ~ agCode ~ creds
-        ~ confLevel ~ ni ~ saRef ~ nme ~ dob
-        ~ eml ~ agInfo ~ groupId ~ credRole
-        ~ mdtpInfo ~ credStrength ~ logins
-        ~ itmpName ~ itmpDateOfBirth ~ itmpAddress
-        if affGroup.contains(AffinityGroup.Organisation) || affGroup.contains(AffinityGroup.Individual) || affGroup.contains(AffinityGroup.Agent) =>
+    authFunction
+      .authorised(predicate)
+      .retrieve(
+        affinityGroup and allEnrolments
+          and internalId and externalId and agentCode and credentials
+          and confidenceLevel and nino and saUtr and name and dateOfBirth
+          and email and agentInformation and groupIdentifier and credentialRole
+          and mdtpInformation and credentialStrength and loginTimes
+          and itmpName and itmpDateOfBirth and itmpAddress) {
+        case affGroup ~ enrolments ~ inId ~ exId ~ agCode ~ creds
+            ~ confLevel ~ ni ~ saRef ~ nme ~ dob
+            ~ eml ~ agInfo ~ groupId ~ credRole
+            ~ mdtpInfo ~ credStrength ~ logins
+            ~ itmpName ~ itmpDateOfBirth ~ itmpAddress
+            if affGroup.contains(AffinityGroup.Organisation) || affGroup.contains(AffinityGroup.Individual) || affGroup.contains(
+              AffinityGroup.Agent) =>
+          val emptyItmpName: ItmpName       = ItmpName(None, None, None)
+          val emptyItmpAddress: ItmpAddress = ItmpAddress(None, None, None, None, None, None, None, None)
 
-        val emptyItmpName: ItmpName = ItmpName(None, None, None)
-        val emptyItmpAddress: ItmpAddress = ItmpAddress(None, None, None, None, None, None, None, None)
+          val identityData =
+            IdentityData(
+              inId,
+              exId,
+              agCode,
+              creds,
+              confLevel,
+              ni,
+              saRef,
+              nme,
+              dob,
+              eml,
+              agInfo,
+              groupId,
+              credRole,
+              mdtpInfo,
+              itmpName.getOrElse(emptyItmpName),
+              itmpDateOfBirth,
+              itmpAddress.getOrElse(emptyItmpAddress),
+              affGroup,
+              credStrength,
+              logins
+            )
 
-        val identityData =
-          IdentityData(
-            inId, exId, agCode, creds,
-            confLevel, ni, saRef, nme, dob,
-            eml, agInfo, groupId,
-            credRole, mdtpInfo, itmpName.getOrElse(emptyItmpName), itmpDateOfBirth,
-            itmpAddress.getOrElse(emptyItmpAddress), affGroup, credStrength, logins
-          )
-
-        createUserDetailsWithLogging(affinityGroup = affGroup.get.toString, enrolments, Some(identityData))
-      case _ =>
-        logger.warn(s"[EnrolmentsAuthService][authorised] Authorisation failed due to unsupported affinity group.")
-        Future.successful(Left(DownstreamError))
-    } recoverWith {
-      case error =>
-        logger.warn(s"[EnrolmentsAuthService][authorised] An unexpected error occurred: $error")
-        Future.successful(Left(DownstreamError))
+          createUserDetailsWithLogging(affinityGroup = affGroup.get.toString, enrolments, Some(identityData))
+        case _ =>
+          logger.warn(s"[EnrolmentsAuthService][authorised] Authorisation failed due to unsupported affinity group.")
+          Future.successful(Left(DownstreamError))
+      } recoverWith { case error =>
+      logger.warn(s"[EnrolmentsAuthService][authorised] An unexpected error occurred: $error")
+      Future.successful(Left(DownstreamError))
     }
   }
 
@@ -97,4 +113,5 @@ class EnrolmentsAuthService @Inject()(val connector: AuthConnector, val appConfi
     .getEnrolment("HMRC-AS-AGENT")
     .flatMap(_.getIdentifier("AgentReferenceNumber"))
     .map(_.value)
+
 }

@@ -25,27 +25,28 @@ import utils.{CurrentDateTime, IdGenerator, Logging}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class NrsController @Inject()(val authService: EnrolmentsAuthService,
-                              val lookupService: MtdIdLookupService,
-                              nrsService: NrsService,
-                              val idGenerator: IdGenerator,
-                              dateTime: CurrentDateTime,
-                              cc: ControllerComponents)(implicit ec: ExecutionContext)
-  extends AuthorisedController(cc) with Logging {
+class NrsController @Inject() (val authService: EnrolmentsAuthService,
+                               val lookupService: MtdIdLookupService,
+                               nrsService: NrsService,
+                               val idGenerator: IdGenerator,
+                               dateTime: CurrentDateTime,
+                               cc: ControllerComponents)(implicit ec: ExecutionContext)
+    extends AuthorisedController(cc)
+    with Logging {
 
   def submit(identifier: String, notableEvent: String): Action[JsValue] =
     authorisedAction(identifier).async(parse.json) { implicit request =>
-
       implicit val correlationId: String = request.headers.get("CorrelationId") match {
-        case None => idGenerator.getUid
+        case None     => idGenerator.getUid
         case Some(id) => id
       }
-      val nrsId = idGenerator.getUid
+      val nrsId               = idGenerator.getUid
       val submissionTimestamp = dateTime.getDateTime
 
       logger.info(s"[NrsController] [submit] NRS submission request received for $notableEvent")
 
       nrsService.submit(identifier, notableEvent, request.body, nrsId, submissionTimestamp)
-          Future.successful(Ok)
+      Future.successful(Ok)
     }
+
 }

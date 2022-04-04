@@ -41,13 +41,13 @@ trait AppConfig {
 }
 
 @Singleton
-class AppConfigImpl @Inject()(config: ServicesConfig, configuration: Configuration) extends AppConfig {
+class AppConfigImpl @Inject() (config: ServicesConfig, configuration: Configuration) extends AppConfig {
 
   val mtdIdBaseUrl: String = config.baseUrl("mtd-id-lookup")
   // NRS config items
-  val appName: String = config.getString("appName")
+  val appName: String    = config.getString("appName")
   val nrsBaseUrl: String = config.baseUrl("non-repudiation")
-  private val nrsConfig = configuration.get[Configuration]("microservice.services.non-repudiation")
+  private val nrsConfig  = configuration.get[Configuration]("microservice.services.non-repudiation")
 
   lazy val nrsRetries: List[FiniteDuration] =
     Retrying.fibonacciDelays(getFiniteDuration(nrsConfig), nrsConfig.get[Int]("numberOfRetries"))
@@ -67,4 +67,3 @@ class AppConfigImpl @Inject()(config: ServicesConfig, configuration: Configurati
 
   def featureSwitch: Option[Configuration] = configuration.getOptional[Configuration](s"feature-switch")
 }
-

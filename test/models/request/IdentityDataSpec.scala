@@ -27,4 +27,5 @@ class IdentityDataSpec extends UnitSpec {
       Json.toJson(correctModel) shouldBe correctJson
     }
   }
+
 }

@@ -23,10 +23,13 @@ sealed trait NrsFailure {
 }
 
 case object NrsFailure {
+
   case class ErrorResponse(status: Int) extends NrsFailure {
     override def retryable: Boolean = Status.isServerError(status)
   }
+
   case object ExceptionThrown extends NrsFailure {
     override def retryable: Boolean = false
   }
+
 }

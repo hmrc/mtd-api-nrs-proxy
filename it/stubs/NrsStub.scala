@@ -27,7 +27,11 @@ object NrsStub extends WireMockMethods {
       .thenReturnWithHeaders(status = status, headers, body)
   }
 
-  private val headers = Map("Content-Type" -> "application/json", "Receipt-Id" -> "de1249ad-c242-4f22-9fe6-f357b1bfcccf",
+  private val headers = Map(
+    "Content-Type"      -> "application/json",
+    "Receipt-Id"        -> "de1249ad-c242-4f22-9fe6-f357b1bfcccf",
     "Receipt-Signature" -> "757b1365-d89e-4dac-8317-ba87efca6c21",
-    "Receipt-Timestamp" -> "2018-03-27T15:10:44.798Z")
+    "Receipt-Timestamp" -> "2018-03-27T15:10:44.798Z"
+  )
+
 }

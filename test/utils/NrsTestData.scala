@@ -87,9 +87,11 @@ object NrsTestData {
         Some(DateTime.parse("2016-11-01T12:00:00Z").withZone(DateTimeZone.UTC))
       )
     )
+
   }
 
   object MetadataTestData {
+
     val correctJson: JsValue = Json.parse(
       s"""
          |{
@@ -126,33 +128,35 @@ object NrsTestData {
       userSubmissionTimestamp = DateTime.parse("2018-04-07T12:13:25Z"),
       identityData = None,
       userAuthToken = "Bearer AbCdEf123456...",
-      headerData = Json.toJson(Map(
-        "Gov-Client-Public-IP" -> "127.0.0.0",
-        "Gov-Client-Public-Port" -> "12345",
-        "Gov-Client-Device-ID" -> "beec798b-b366-47fa-b1f8-92cede14a1ce",
-        "Gov-Client-User-ID" -> "alice_desktop",
-        "Gov-Client-Timezone" -> "GMT+3",
-        "Gov-Client-Local-IP" -> "10.1.2.3",
-        "Gov-Client-Screen-Resolution" -> "1920x1080",
-        "Gov-Client-Window-Size" -> "1256x803",
-        "Gov-Client-Colour-Depth" -> "24"
-      )),
-      searchKeys =
-        SearchKeys(
-          identifier = Some(VRN("123456789")),
-          companyName = None,
-          periodKey = Some("18AA"),
-          taxPeriodEndDate = None
-        )
+      headerData = Json.toJson(
+        Map(
+          "Gov-Client-Public-IP"         -> "127.0.0.0",
+          "Gov-Client-Public-Port"       -> "12345",
+          "Gov-Client-Device-ID"         -> "beec798b-b366-47fa-b1f8-92cede14a1ce",
+          "Gov-Client-User-ID"           -> "alice_desktop",
+          "Gov-Client-Timezone"          -> "GMT+3",
+          "Gov-Client-Local-IP"          -> "10.1.2.3",
+          "Gov-Client-Screen-Resolution" -> "1920x1080",
+          "Gov-Client-Window-Size"       -> "1256x803",
+          "Gov-Client-Colour-Depth"      -> "24"
+        )),
+      searchKeys = SearchKeys(
+        identifier = Some(VRN("123456789")),
+        companyName = None,
+        periodKey = Some("18AA"),
+        taxPeriodEndDate = None
+      )
     )
+
   }
 
   object SearchKeysTestData {
+
     val correctJson: JsObject = Json.obj(
-      "nino" -> "identifier",
-      "companyName" -> "Good, Bad & Ugly Ltd",
+      "nino"             -> "identifier",
+      "companyName"      -> "Good, Bad & Ugly Ltd",
       "taxPeriodEndDate" -> "2018-06-04",
-      "periodKey" -> "period key"
+      "periodKey"        -> "period key"
     )
 
     val correctModel: SearchKeys =
@@ -162,19 +166,23 @@ object NrsTestData {
         taxPeriodEndDate = Some(LocalDate.parse("2018-06-04")),
         periodKey = Some("period key")
       )
+
   }
 
   object FullRequestTestData {
+
     val correctJson: JsObject = Json.obj(
-      "payload" -> "XXX-base64checksum-XXX",
+      "payload"  -> "XXX-base64checksum-XXX",
       "metadata" -> MetadataTestData.correctJson
     )
 
     val correctJsonString: String = correctJson.toString
 
     val correctModel: NrsSubmission = NrsSubmission(
-      "XXX-base64checksum-XXX", MetadataTestData.correctModel
+      "XXX-base64checksum-XXX",
+      MetadataTestData.correctModel
     )
+
   }
 
   object NrsResponseTestData {
@@ -188,6 +196,7 @@ object NrsTestData {
         |}
     """.stripMargin
     )
+
   }
 
 }

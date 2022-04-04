@@ -37,6 +37,7 @@ trait MockNrsService extends MockFactory {
         .submit(_: String, _: String, _: JsValue, _: String, _: DateTime)(_: UserRequest[_], _: HeaderCarrier, _: ExecutionContext, _: String))
         .expects(identifier, *, *, *, *, *, *, *, *)
     }
+
   }
 
 }

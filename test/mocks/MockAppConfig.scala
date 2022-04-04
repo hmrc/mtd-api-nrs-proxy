@@ -31,9 +31,10 @@ trait MockAppConfig extends MockFactory {
     def apiStatus: CallHandler[String] = (mockAppConfig.apiStatus: String => String).expects("1.0")
 
     // NRS config items
-    def nrsApiKey: CallHandler[String] = (mockAppConfig.nrsApiKey _).expects()
-    def appName: CallHandler[String] = (mockAppConfig.appName _).expects()
-    def nrsBaseUrl: CallHandler[String] = (mockAppConfig.nrsBaseUrl _).expects()
+    def nrsApiKey: CallHandler[String]                = (mockAppConfig.nrsApiKey _).expects()
+    def appName: CallHandler[String]                  = (mockAppConfig.appName _).expects()
+    def nrsBaseUrl: CallHandler[String]               = (mockAppConfig.nrsBaseUrl _).expects()
     def nrsRetries: CallHandler[List[FiniteDuration]] = (mockAppConfig.nrsRetries _).expects()
   }
+
 }

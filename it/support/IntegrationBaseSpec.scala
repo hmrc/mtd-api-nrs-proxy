@@ -22,28 +22,27 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.ws.{WSClient, WSRequest}
 import play.api.{Application, Environment, Mode}
 
-trait IntegrationBaseSpec extends UnitSpec with WireMockHelper with GuiceOneServerPerSuite
-  with BeforeAndAfterEach with BeforeAndAfterAll {
+trait IntegrationBaseSpec extends UnitSpec with WireMockHelper with GuiceOneServerPerSuite with BeforeAndAfterEach with BeforeAndAfterAll {
 
-  val mockHost: String = WireMockHelper.host
-  val mockPort: String = WireMockHelper.wireMockPort.toString
+  val mockHost: String        = WireMockHelper.host
+  val mockPort: String        = WireMockHelper.wireMockPort.toString
   val appRouteContext: String = "/mtd-api-nrs-proxy"
 
   lazy val client: WSClient = app.injector.instanceOf[WSClient]
 
   def servicesConfig: Map[String, Any] = Map(
-    "microservice.services.mtd-id-lookup.host" -> mockHost,
-    "microservice.services.mtd-id-lookup.port" -> mockPort,
-    "microservice.services.auth.host" -> mockHost,
-    "microservice.services.auth.port" -> mockPort,
-    "auditing.consumer.baseUri.port" -> mockPort,
-    "microservice.services.non-repudiation.host" -> mockHost,
-    "microservice.services.non-repudiation.port" -> mockPort,
-    "feature-switch.refactor.enabled" -> true,
-    "feature-switch.refactor.prod.enabled" -> false,
+    "microservice.services.mtd-id-lookup.host"              -> mockHost,
+    "microservice.services.mtd-id-lookup.port"              -> mockPort,
+    "microservice.services.auth.host"                       -> mockHost,
+    "microservice.services.auth.port"                       -> mockPort,
+    "auditing.consumer.baseUri.port"                        -> mockPort,
+    "microservice.services.non-repudiation.host"            -> mockHost,
+    "microservice.services.non-repudiation.port"            -> mockPort,
+    "feature-switch.refactor.enabled"                       -> true,
+    "feature-switch.refactor.prod.enabled"                  -> false,
     "microservice.services.non-repudiation.numberOfRetries" -> 1,
-    "microservice.services.non-repudiation.initialDelays" -> "5 milliseconds",
-    "metrics.enabled" -> true
+    "microservice.services.non-repudiation.initialDelays"   -> "5 milliseconds",
+    "metrics.enabled"                                       -> true
   )
 
   override implicit lazy val app: Application = new GuiceApplicationBuilder()

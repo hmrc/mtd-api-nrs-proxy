@@ -31,14 +31,17 @@ trait MockEnrolmentsAuthService extends MockFactory {
   object MockEnrolmentsAuthService {
 
     def authoriseUser(): CallHandler[Future[AuthOutcome]] = {
-      (mockEnrolmentsAuthService.authorised(_: Predicate)(_: HeaderCarrier, _: ExecutionContext))
+      (mockEnrolmentsAuthService
+        .authorised(_: Predicate)(_: HeaderCarrier, _: ExecutionContext))
         .expects(*, *, *)
     }
 
     def authorised(predicate: Predicate): CallHandler[Future[AuthOutcome]] = {
-      (mockEnrolmentsAuthService.authorised(_: Predicate)(_: HeaderCarrier, _: ExecutionContext))
+      (mockEnrolmentsAuthService
+        .authorised(_: Predicate)(_: HeaderCarrier, _: ExecutionContext))
         .expects(predicate, *, *)
     }
+
   }
 
 }

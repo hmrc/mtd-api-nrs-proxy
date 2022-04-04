@@ -49,6 +49,7 @@ class RetryingSpec extends UnitSpec with ScalaFutures with GuiceOneAppPerSuite w
   def noDelayRetries(num: Int): List[FiniteDuration] = List.fill(num)(0.millis)
 
   val exception = new RuntimeException with NoStackTrace
+
   def succeedAfter(numFails: Int): Int => Future[String] = { i =>
     if (i < numFails) Future.failed(exception) else Future.successful(s"Attempt $i")
   }
@@ -155,14 +156,7 @@ class RetryingSpec extends UnitSpec with ScalaFutures with GuiceOneAppPerSuite w
     "getting fibonacci delays" must {
       "return fibonacci values" in {
         Retrying
-          .fibonacciDelays(1.second, 7) shouldBe Seq(
-          1.second,
-          1.second,
-          2.seconds,
-          3.seconds,
-          5.seconds,
-          8.seconds,
-          13.seconds)
+          .fibonacciDelays(1.second, 7) shouldBe Seq(1.second, 1.second, 2.seconds, 3.seconds, 5.seconds, 8.seconds, 13.seconds)
       }
 
       "must allow to be scaled by a factor" in {
@@ -175,4 +169,5 @@ class RetryingSpec extends UnitSpec with ScalaFutures with GuiceOneAppPerSuite w
       }
     }
   }
+
 }

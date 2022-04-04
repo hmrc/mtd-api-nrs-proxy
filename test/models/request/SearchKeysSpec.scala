@@ -31,4 +31,5 @@ class SearchKeysSpec extends UnitSpec {
       Json.toJson(SearchKeys()) shouldBe JsObject.empty
     }
   }
+
 }

@@ -27,8 +27,8 @@ import support.IntegrationBaseSpec
 class AuthISpec extends IntegrationBaseSpec {
 
   private trait Test {
-    val nino: String = "AA123456A"
-    val notableEvent: String = "itsa"
+    val nino: String          = "AA123456A"
+    val notableEvent: String  = "itsa"
     val correlationId: String = "X-123"
 
     val requestBodyJson: JsValue = Json.parse(
@@ -50,10 +50,10 @@ class AuthISpec extends IntegrationBaseSpec {
       buildRequest(uri)
         .withHttpHeaders((ACCEPT, "application/vnd.hmrc.1.0+json"), ("Authorization", "Bearer testtoken"))
     }
+
   }
 
-  val nrsSuccess: JsValue = Json.parse(
-    s"""
+  val nrsSuccess: JsValue = Json.parse(s"""
        |{
        |  "nrSubmissionId":"2dd537bc-4244-4ebf-bac9-96321be13cdc",
        |  "cadesTSignature":"30820b4f06092a864886f70111111111c0445c464",
@@ -121,4 +121,5 @@ class AuthISpec extends IntegrationBaseSpec {
       }
     }
   }
+
 }

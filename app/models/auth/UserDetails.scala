@@ -18,7 +18,4 @@ package models.auth
 
 import models.request.IdentityData
 
-case class UserDetails(enrolmentIdentifier: String,
-                       userType: String,
-                       agentReferenceNumber: Option[String],
-                       identityData: Option[IdentityData] = None)
+case class UserDetails(enrolmentIdentifier: String, userType: String, agentReferenceNumber: Option[String], identityData: Option[IdentityData] = None)

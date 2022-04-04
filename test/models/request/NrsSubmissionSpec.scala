@@ -27,4 +27,5 @@ class NrsSubmissionSpec extends UnitSpec {
       Json.toJson(correctModel) shouldBe correctJson
     }
   }
+
 }

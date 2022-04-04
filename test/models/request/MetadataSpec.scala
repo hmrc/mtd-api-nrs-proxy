@@ -27,4 +27,5 @@ class MetadataSpec extends UnitSpec {
       Json.toJson(correctModel) shouldBe correctJson
     }
   }
+
 }

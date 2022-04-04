@@ -59,7 +59,6 @@ object AuthFixture {
       )
     )
 
-
   val saEnrolments: Enrolments =
     Enrolments(
       enrolments = Set(
@@ -98,10 +97,11 @@ object AuthFixture {
       internalId = Some("Int-a7688cda-d983-472d-9971-ddca5f124641"),
       externalId = Some("Ext-c4ebc935-ac7a-4cc2-950a-19e6fac91f2a"),
       agentCode = None,
-      credentials = Some(retrieve.Credentials(
-        providerId = "8124873381064832",
-        providerType = "GovernmentGateway"
-      )),
+      credentials = Some(
+        retrieve.Credentials(
+          providerId = "8124873381064832",
+          providerType = "GovernmentGateway"
+        )),
       confidenceLevel = ConfidenceLevel.L200,
       nino = None,
       saUtr = None,
@@ -147,76 +147,90 @@ object AuthFixture {
 
   val indIdentityData: IdentityData = orgIdentityData.copy(affinityGroup = Some(AffinityGroup.Individual))
 
-  val agentIdentityData: IdentityData = orgIdentityData.copy(affinityGroup = Some(AffinityGroup.Agent), agentCode = Some("AGENT007"), agentInformation = AgentInformation(
+  val agentIdentityData: IdentityData = orgIdentityData.copy(
+    affinityGroup = Some(AffinityGroup.Agent),
     agentCode = Some("AGENT007"),
-    agentFriendlyName = Some("James"),
-    agentId = Some("987654321")
-  ))
+    agentInformation = AgentInformation(
+      agentCode = Some("AGENT007"),
+      agentFriendlyName = Some("James"),
+      agentId = Some("987654321")
+    )
+  )
 
-  val authResponse: (IdentityData, Enrolments) => Option[AffinityGroup] ~ Enrolments ~ Option[String] ~ Option[String] ~ Option[String] ~ Option[Credentials] ~ ConfidenceLevel ~ None.type ~ None.type ~ Option[Name] ~ None.type ~ Option[String] ~ AgentInformation ~ Option[String] ~ Option[CredentialRole] ~ None.type ~ Option[String] ~ LoginTimes ~ Option[ItmpName] ~ Option[LocalDate] ~ Option[ItmpAddress] =
-    (data, enrolments) => new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(new ~(
-      data.affinityGroup,
-      enrolments),
-      data.internalId),
-      data.externalId),
-      data.agentCode),
-      data.credentials),
-      data.confidenceLevel),
-      None),
-      None),
-      data.name)
-      , None),
-      data.email),
-      data.agentInformation),
-      data.groupIdentifier),
-      data.credentialRole),
-      None),
-      data.credentialStrength),
-      data.loginTimes),
-      Some(data.itmpName)),
-      data.itmpDateOfBirth),
-      Some(data.itmpAddress)
+  val authResponse: (IdentityData, Enrolments) => Option[AffinityGroup] ~ Enrolments ~ Option[String] ~ Option[String] ~ Option[String] ~ Option[
+    Credentials] ~ ConfidenceLevel ~ None.type ~ None.type ~ Option[Name] ~ None.type ~ Option[String] ~ AgentInformation ~ Option[String] ~ Option[
+    CredentialRole] ~ None.type ~ Option[String] ~ LoginTimes ~ Option[ItmpName] ~ Option[LocalDate] ~ Option[ItmpAddress] =
+    (data, enrolments) =>
+      new ~(
+        new ~(
+          new ~(
+            new ~(
+              new ~(
+                new ~(
+                  new ~(
+                    new ~(
+                      new ~(
+                        new ~(
+                          new ~(
+                            new ~(
+                              new ~(
+                                new ~(
+                                  new ~(
+                                    new ~(
+                                      new ~(new ~(new ~(new ~(data.affinityGroup, enrolments), data.internalId), data.externalId), data.agentCode),
+                                      data.credentials),
+                                    data.confidenceLevel),
+                                  None),
+                                None),
+                              data.name),
+                            None),
+                          data.email),
+                        data.agentInformation),
+                      data.groupIdentifier),
+                    data.credentialRole),
+                  None),
+                data.credentialStrength),
+              data.loginTimes),
+            Some(data.itmpName)),
+          data.itmpDateOfBirth),
+        Some(data.itmpAddress))
+
+  val userDetails: (AffinityGroup, AgentInformation) => UserDetails = (Individual, agentInformation) =>
+    UserDetails(
+      userType = Individual.toString,
+      agentReferenceNumber = agentInformation.agentId,
+      enrolmentIdentifier = "",
+      identityData = Option(
+        IdentityData(
+          internalId = Some("Int-a7688cda-d983-472d-9971-ddca5f124641"),
+          externalId = Some("Ext-c4ebc935-ac7a-4cc2-950a-19e6fac91f2a"),
+          agentCode = agentInformation.agentCode,
+          credentials = Some(Credentials("8124873381064832", "GovernmentGateway")),
+          confidenceLevel = ConfidenceLevel.L200,
+          nino = None,
+          saUtr = None,
+          name = Some(Name(name = Some("TestUser"), lastName = None)),
+          dateOfBirth = None,
+          email = Some("user@test.com"),
+          agentInformation = agentInformation,
+          groupIdentifier = Some("testGroupId-840cf4e3-c8ad-48f4-80fd-ea267f916be5"),
+          credentialRole = Some(User),
+          mdtpInformation = None,
+          itmpName = ItmpName(givenName = None, familyName = None, middleName = None),
+          itmpDateOfBirth = None,
+          itmpAddress = ItmpAddress(
+            line1 = None,
+            line2 = None,
+            line3 = None,
+            line4 = None,
+            line5 = None,
+            postCode = None,
+            countryName = None,
+            countryCode = None),
+          affinityGroup = Some(Individual),
+          credentialStrength = Some("strong"),
+          loginTimes = LoginTimes(currentLogin = DateTime.parse("2018-04-16T11:00:55.000Z"), previousLogin = None)
+        ))
     )
 
-  val userDetails: (AffinityGroup, AgentInformation) => UserDetails = (Individual, agentInformation) => UserDetails(userType = Individual.toString,
-    agentReferenceNumber = agentInformation.agentId,
-    enrolmentIdentifier = "",
-    identityData = Option(
-      IdentityData(
-        internalId = Some("Int-a7688cda-d983-472d-9971-ddca5f124641"),
-        externalId = Some("Ext-c4ebc935-ac7a-4cc2-950a-19e6fac91f2a"),
-        agentCode = agentInformation.agentCode,
-        credentials = Some(Credentials("8124873381064832", "GovernmentGateway")),
-        confidenceLevel = ConfidenceLevel.L200,
-        nino = None,
-        saUtr = None,
-        name = Some(
-          Name(
-            name = Some("TestUser"),
-            lastName = None)),
-        dateOfBirth = None,
-        email = Some("user@test.com"),
-        agentInformation = agentInformation,
-        groupIdentifier = Some("testGroupId-840cf4e3-c8ad-48f4-80fd-ea267f916be5"),
-        credentialRole = Some(User),
-        mdtpInformation = None,
-        itmpName = ItmpName(
-          givenName = None,
-          familyName = None,
-          middleName = None),
-        itmpDateOfBirth = None,
-        itmpAddress = ItmpAddress(
-          line1 = None,
-          line2 = None,
-          line3 = None,
-          line4 = None,
-          line5 = None,
-          postCode = None,
-          countryName = None,
-          countryCode = None),
-        affinityGroup = Some(Individual),
-        credentialStrength = Some("strong"),
-        loginTimes = LoginTimes(
-          currentLogin = DateTime.parse("2018-04-16T11:00:55.000Z"),
-          previousLogin = None))))
 }

@@ -26,6 +26,7 @@ object Retrying {
 
   def fibonacciDelays(initialDelay: FiniteDuration, numRetries: Int): List[FiniteDuration] =
     fibonacci.take(numRetries).map(i => i * initialDelay).toList
+
 }
 
 trait Retrying {
@@ -33,12 +34,15 @@ trait Retrying {
 
   implicit val ec: ExecutionContext
 
-  /**
-    * Retries an operation returning a future
-    * @param delays delays between retries
-    * @param retryCondition whether to retry based on a result or otherwise return that result (which may be a failed future)
-    * @param task the task returning a future (a function that accepts the attempt number)
-    * @return the result of the last attempt
+  /** Retries an operation returning a future
+    * @param delays
+    *   delays between retries
+    * @param retryCondition
+    *   whether to retry based on a result or otherwise return that result (which may be a failed future)
+    * @param task
+    *   the task returning a future (a function that accepts the attempt number)
+    * @return
+    *   the result of the last attempt
     */
   def retry[A](delays: List[FiniteDuration], retryCondition: Try[A] => Boolean)(task: Int => Future[A]): Future[A] = {
 
@@ -67,5 +71,5 @@ trait Retrying {
 
     loop(0, delays)
   }
-}
 
+}

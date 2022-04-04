@@ -24,15 +24,9 @@ import play.api.test.{DefaultAwaitTimeout, FutureAwaits}
 import scala.language.postfixOps
 import scala.language.implicitConversions
 
-trait UnitSpec extends AnyWordSpecLike
-  with MockFactory
-  with EitherValues
-  with Matchers
-  with FutureAwaits
-  with DefaultAwaitTimeout {
+trait UnitSpec extends AnyWordSpecLike with MockFactory with EitherValues with Matchers with FutureAwaits with DefaultAwaitTimeout {
 
-
-  //lifted from hmrctest UnitSpec.  Should find a way to use their UnitSpec in future iterations
+  // lifted from hmrctest UnitSpec.  Should find a way to use their UnitSpec in future iterations
   import scala.concurrent.duration._
   import scala.concurrent.{Await, Future}
 

@@ -41,17 +41,17 @@ abstract class AuthorisedController(cc: ControllerComponents)(implicit ec: Execu
 
     override protected def executionContext: ExecutionContext = cc.executionContext
 
-    def invokeBlockWithAuthCheckForSA[A](mtdId: String, request: Request[A], block: UserRequest[A] => Future[Result])(
-      implicit headerCarrier: HeaderCarrier): Future[Result] = {
+    def invokeBlockWithAuthCheckForSA[A](mtdId: String, request: Request[A], block: UserRequest[A] => Future[Result])(implicit
+        headerCarrier: HeaderCarrier): Future[Result] = {
 
       val predicate: Predicate =
         Enrolment("HMRC-MTD-IT")
-        .withIdentifier("MTDITID", mtdId)
-        .withDelegatedAuthRule("mtd-it-auth")
+          .withIdentifier("MTDITID", mtdId)
+          .withDelegatedAuthRule("mtd-it-auth")
 
       authService.authorised(predicate).flatMap[Result] {
-        case Right(userDetails)      => block(UserRequest(userDetails.copy(enrolmentIdentifier = mtdId), request))
-        case Left(_)                 => Future.successful(InternalServerError(Json.toJson(DownstreamError)))
+        case Right(userDetails) => block(UserRequest(userDetails.copy(enrolmentIdentifier = mtdId), request))
+        case Left(_)            => Future.successful(InternalServerError(Json.toJson(DownstreamError)))
       }
     }
 
@@ -61,8 +61,10 @@ abstract class AuthorisedController(cc: ControllerComponents)(implicit ec: Execu
 
       lookupService.lookup(identifier).flatMap[Result] {
         case Right(mtdId) => invokeBlockWithAuthCheckForSA(mtdId, request, block)
-        case Left(_) => Future.successful(InternalServerError(Json.toJson(DownstreamError)))
+        case Left(_)      => Future.successful(InternalServerError(Json.toJson(DownstreamError)))
       }
     }
+
   }
+
 }
