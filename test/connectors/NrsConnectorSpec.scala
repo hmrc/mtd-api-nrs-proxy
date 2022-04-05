@@ -38,14 +38,9 @@ import uk.gov.hmrc.http.HttpClient
 
 import scala.concurrent.duration.{FiniteDuration, _}
 
+class NrsConnectorSpec extends ConnectorSpec with BeforeAndAfterAll with GuiceOneAppPerSuite with Injecting with MockAppConfig {
 
-class NrsConnectorSpec extends ConnectorSpec
-  with BeforeAndAfterAll
-  with GuiceOneAppPerSuite
-  with Injecting
-  with MockAppConfig {
-
-  private val nrsSubmission: NrsSubmission = FullRequestTestData.correctModel
+  private val nrsSubmission: NrsSubmission    = FullRequestTestData.correctModel
   private val nrsSubmissionJsonString: String = FullRequestTestData.correctJsonString
 
   override lazy val app: Application = new GuiceApplicationBuilder()
@@ -71,7 +66,6 @@ class NrsConnectorSpec extends ConnectorSpec
                  |   "nrSubmissionId": "submissionId"
                  |}""".stripMargin)
 
-
   override def beforeAll(): Unit = {
     wireMockServer.start()
     port = wireMockServer.port()
@@ -91,7 +85,6 @@ class NrsConnectorSpec extends ConnectorSpec
     val connector = new NrsConnector(httpClient, mockAppConfig)
 
   }
-
 
   "NRSConnector" when {
     "immediately successful" must {
@@ -188,4 +181,5 @@ class NrsConnectorSpec extends ConnectorSpec
       }
     }
   }
+
 }

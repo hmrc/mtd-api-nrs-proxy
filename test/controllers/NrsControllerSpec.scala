@@ -30,21 +30,21 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class NrsControllerSpec
-  extends ControllerBaseSpec
+    extends ControllerBaseSpec
     with MockEnrolmentsAuthService
     with MockCurrentDateTime
     with MockNrsService
     with MockIdGenerator
     with MockMtdIdLookupService {
 
-  val date: DateTime = DateTime.parse("2017-01-01T00:00:00.000Z")
-  val fmt: String = DateUtils.dateTimePattern
-  val nino: String = "AA123456A"
-  val vrn: String = "123456789"
-  val notableEvent: String = "submit"
+  val date: DateTime        = DateTime.parse("2017-01-01T00:00:00.000Z")
+  val fmt: String           = DateUtils.dateTimePattern
+  val nino: String          = "AA123456A"
+  val vrn: String           = "123456789"
+  val notableEvent: String  = "submit"
   val correlationId: String = "X-ID"
-  val uid: String = "a5894863-9cd7-4d0d-9eee-301ae79cbae6"
-  val periodKey: String = "A1A2"
+  val uid: String           = "a5894863-9cd7-4d0d-9eee-301ae79cbae6"
+  val periodKey: String     = "A1A2"
 
   trait Test {
     val hc: HeaderCarrier = HeaderCarrier()
@@ -66,6 +66,7 @@ class NrsControllerSpec
       MockIdGenerator.getUid.returns(uid).once()
       MockIdGenerator.getUid.returns(correlationId).anyNumberOfTimes()
     }
+
   }
 
   val submitRequestBodyJson: JsValue = Json.parse(
@@ -117,4 +118,5 @@ class NrsControllerSpec
       }
     }
   }
+
 }

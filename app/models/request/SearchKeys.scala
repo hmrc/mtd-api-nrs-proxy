@@ -28,18 +28,12 @@ case class SearchKeys(identifier: Option[Identifier] = None,
 object SearchKeys {
   implicit val dateFormats: Format[LocalDate] = DateUtils.dateFormat
 
-  implicit val writes: OWrites[SearchKeys] = (o: SearchKeys) => JsObject.apply(
-    o.identifier.fold(Seq.empty[(String, JsValue)])(
-      identifier => Seq(identifier.identifierName -> Json.toJson(identifier.identifierValue))
-    ) ++
-      o.companyName.fold(Seq.empty[(String, JsValue)])(
-        companyName => Seq("companyName" -> Json.toJson(companyName))
-      ) ++
-      o.taxPeriodEndDate.fold(Seq.empty[(String, JsValue)])(
-        taxPeriodEndDate => Seq("taxPeriodEndDate" -> Json.toJson(taxPeriodEndDate))
-      ) ++
-      o.periodKey.fold(Seq.empty[(String, JsValue)])(
-        periodKey => Seq("periodKey" -> Json.toJson(periodKey))
-      )
-  )
+  implicit val writes: OWrites[SearchKeys] = (o: SearchKeys) =>
+    JsObject.apply(
+      o.identifier.fold(Seq.empty[(String, JsValue)])(identifier => Seq(identifier.identifierName -> Json.toJson(identifier.identifierValue))) ++
+        o.companyName.fold(Seq.empty[(String, JsValue)])(companyName => Seq("companyName" -> Json.toJson(companyName))) ++
+        o.taxPeriodEndDate.fold(Seq.empty[(String, JsValue)])(taxPeriodEndDate => Seq("taxPeriodEndDate" -> Json.toJson(taxPeriodEndDate))) ++
+        o.periodKey.fold(Seq.empty[(String, JsValue)])(periodKey => Seq("periodKey" -> Json.toJson(periodKey)))
+    )
+
 }

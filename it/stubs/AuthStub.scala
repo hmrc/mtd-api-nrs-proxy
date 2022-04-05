@@ -88,4 +88,5 @@ object AuthStub extends WireMockMethods {
                                                         |  ]
                                                         |}
                                                       """.stripMargin)
+
 }

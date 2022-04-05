@@ -34,19 +34,17 @@ class NrsServiceSpec extends ServiceSpec with MockNrsConnector with MockHashUtil
 
   val metrics: Metrics = new MockMetrics
 
-  private val nino: String = "AA111111A"
+  private val nino: String         = "AA111111A"
   private val notableEvent: String = "submit"
 
   private val timestamp: DateTime = DateTime.parse("2018-04-07T12:13:25.156Z")
 
-  private val submitRequestBodyString = Json.toJson(
-    """{
+  private val submitRequestBodyString = Json.toJson("""{
       |"test":"test123"
       |}""".stripMargin)
 
-
   private val encodedString: String = "encodedString"
-  private val checksum: String = "checksum"
+  private val checksum: String      = "checksum"
 
   private val nrsId: String = "a5894863-9cd7-4d0d-9eee-301ae79cbae6"
 
@@ -61,19 +59,19 @@ class NrsServiceSpec extends ServiceSpec with MockNrsConnector with MockHashUtil
         userSubmissionTimestamp = timestamp,
         identityData = Some(IdentityDataTestData.correctModel),
         userAuthToken = "Bearer aaaa",
-        headerData = Json.toJson(Map(
-          "Host" -> "localhost",
-          "Authorization" -> "Bearer aaaa",
-          "dummyHeader1" -> "dummyValue1",
-          "dummyHeader2" -> "dummyValue2"
-        )),
-        searchKeys =
-          SearchKeys(
-            identifier = Some(NINO(nino)),
-            companyName = None,
-            periodKey = None,
-            taxPeriodEndDate = None
-          )
+        headerData = Json.toJson(
+          Map(
+            "Host"          -> "localhost",
+            "Authorization" -> "Bearer aaaa",
+            "dummyHeader1"  -> "dummyValue1",
+            "dummyHeader2"  -> "dummyValue2"
+          )),
+        searchKeys = SearchKeys(
+          identifier = Some(NINO(nino)),
+          companyName = None,
+          periodKey = None,
+          taxPeriodEndDate = None
+        )
       )
     )
 
@@ -81,17 +79,16 @@ class NrsServiceSpec extends ServiceSpec with MockNrsConnector with MockHashUtil
 
     implicit val userRequest: UserRequest[_] =
       UserRequest(
-        userDetails =
-          UserDetails(
-            enrolmentIdentifier = "id",
-            userType = "Individual",
-            agentReferenceNumber = None,
-            identityData = Some(IdentityDataTestData.correctModel)
-          ),
+        userDetails = UserDetails(
+          enrolmentIdentifier = "id",
+          userType = "Individual",
+          agentReferenceNumber = None,
+          identityData = Some(IdentityDataTestData.correctModel)
+        ),
         request = FakeRequest().withHeaders(
           "Authorization" -> "Bearer aaaa",
-          "dummyHeader1" -> "dummyValue1",
-          "dummyHeader2" -> "dummyValue2"
+          "dummyHeader1"  -> "dummyValue1",
+          "dummyHeader2"  -> "dummyValue2"
         )
       )
 
@@ -100,13 +97,15 @@ class NrsServiceSpec extends ServiceSpec with MockNrsConnector with MockHashUtil
       mockHashUtil,
       metrics
     )
+
   }
 
   "service" when {
     "service call successful" must {
       "return the expected result" in new Test {
 
-        MockNrsConnector.submitNrs(nrsSubmission)
+        MockNrsConnector
+          .submitNrs(nrsSubmission)
           .returns(Future.successful(Right(NrsResponse(nrsId))))
 
         MockedHashUtil.encode(submitRequestBodyString.toString()).returns(encodedString)
@@ -122,11 +121,13 @@ class NrsServiceSpec extends ServiceSpec with MockNrsConnector with MockHashUtil
         MockedHashUtil.encode(submitRequestBodyString.toString()).returns(encodedString)
         MockedHashUtil.getHash(submitRequestBodyString.toString()).returns(checksum)
 
-        MockNrsConnector.submitNrs(nrsSubmission)
+        MockNrsConnector
+          .submitNrs(nrsSubmission)
           .returns(Future.successful(Left(NrsFailure.ExceptionThrown)))
 
         await(service.submit(nino, notableEvent, submitRequestBodyString, nrsId, timestamp)) shouldBe ((): Unit)
       }
     }
   }
+
 }

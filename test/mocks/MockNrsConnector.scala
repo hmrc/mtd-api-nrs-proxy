@@ -35,6 +35,7 @@ trait MockNrsConnector extends MockFactory {
         .submit(_: NrsSubmission)(_: HeaderCarrier, _: String))
         .expects(body, *, *)
     }
+
   }
 
 }

@@ -28,4 +28,5 @@ class DIModule extends AbstractModule {
   @Provides
   def akkaScheduler(actorSystem: ActorSystem): Scheduler =
     actorSystem.scheduler
+
 }

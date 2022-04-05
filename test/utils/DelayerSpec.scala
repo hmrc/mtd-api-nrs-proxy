@@ -46,4 +46,5 @@ class DelayerSpec extends UnitSpec {
       f.isCompleted shouldBe true
     }
   }
+
 }

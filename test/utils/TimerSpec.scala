@@ -25,19 +25,21 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class TimerSpec extends UnitSpec {
 
-  class Test extends Timer with Logging{
+  class Test extends Timer with Logging {
     val metrics: Metrics = new MockMetrics
 
     var timeMs: Long = _
+
     override def stopAndLog[A](name: String, timer: com.codahale.metrics.Timer.Context): Unit =
       timeMs = timer.stop() / 1000000
+
   }
 
   "Timer" should {
 
     "Time a future correctly" in new Test {
       val sleepMs = 300
-        await(timeFuture("test timer", "test.sleep") {
+      await(timeFuture("test timer", "test.sleep") {
         Thread.sleep(sleepMs)
       })
       val beWithinTolerance: Matcher[Long] = be >= sleepMs.toLong and be <= (sleepMs + 100).toLong
@@ -75,4 +77,5 @@ class TimerSpec extends UnitSpec {
       timeMs shouldNot beWithinTolerance
     }
   }
+
 }

@@ -20,5 +20,5 @@ import models.response.{NrsFailure, NrsResponse}
 package object connectors {
 
   type MtdIdLookupOutcome = Either[MtdError, String]
-  type NrsOutcome = Either[NrsFailure, NrsResponse]
+  type NrsOutcome         = Either[NrsFailure, NrsResponse]
 }

@@ -29,8 +29,8 @@ trait Timer {
 
   val metrics: Metrics
 
-  def timeFuture[A](name: String, metric: Metric, timerGroup: String = defaultTimerGroup)(block: => Future[A])(
-    implicit ec: ExecutionContext): Future[A] = {
+  def timeFuture[A](name: String, metric: Metric, timerGroup: String = defaultTimerGroup)(block: => Future[A])(implicit
+      ec: ExecutionContext): Future[A] = {
     val timer = startTimer(metric, timerGroup)
     block andThen { case _ => stopAndLog(name, timer) }
   }
@@ -49,4 +49,5 @@ trait Timer {
 
     logger.info(getClass.getName + s" $name took $timeMillis ms")
   }
+
 }

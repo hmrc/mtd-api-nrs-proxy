@@ -30,26 +30,24 @@ import utils.{HashUtil, Logging, Timer}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class NrsService @Inject()(connector: NrsConnector,
-                           hashUtil: HashUtil,
-                           override val metrics: Metrics) extends Timer with Logging {
+class NrsService @Inject() (connector: NrsConnector, hashUtil: HashUtil, override val metrics: Metrics) extends Timer with Logging {
 
-  def submit(identifier: String, notableEvent: String, body: JsValue, generatedNrsId: String, submissionTimestamp: DateTime)(
-    implicit request: UserRequest[_],
-    hc: HeaderCarrier,
-    ec: ExecutionContext,
-    correlationId: String): Future[Unit] = {
+  def submit(identifier: String, notableEvent: String, body: JsValue, generatedNrsId: String, submissionTimestamp: DateTime)(implicit
+      request: UserRequest[_],
+      hc: HeaderCarrier,
+      ec: ExecutionContext,
+      correlationId: String): Future[Unit] = {
 
     val nrsSubmission = buildItsaNrsSubmission(identifier, notableEvent, body, submissionTimestamp, request)
 
     timeFuture("NRS Submission", "nrs.submission") {
       connector.submit(nrsSubmission).flatMap {
         case Left(err) =>
-        logger.info(s"Error occurred in NRS Submission :: $err")
-        Future.successful((): Unit)
+          logger.info(s"Error occurred in NRS Submission :: $err")
+          Future.successful((): Unit)
         case Right(response) =>
-        logger.info(s"NRS Submission is successful with submission id ${response.nrSubmissionId}")
-        Future.successful((): Unit)
+          logger.info(s"NRS Submission is successful with submission id ${response.nrSubmissionId}")
+          Future.successful((): Unit)
       }
     }
   }
@@ -60,7 +58,7 @@ class NrsService @Inject()(connector: NrsConnector,
                              submissionTimestamp: DateTime,
                              request: UserRequest[_]): NrsSubmission = {
 
-    val payloadString = body.toString()
+    val payloadString  = body.toString()
     val encodedPayload = hashUtil.encode(payloadString)
     val sha256Checksum = hashUtil.getHash(payloadString)
 
@@ -75,14 +73,12 @@ class NrsService @Inject()(connector: NrsConnector,
         identityData = request.userDetails.identityData,
         userAuthToken = request.headers.get("Authorization").get,
         headerData = Json.toJson(request.headers.toMap.map { h => h._1 -> h._2.head }),
-        searchKeys =
-          SearchKeys(
-            identifier = Some(NINO(identifier)),
-            companyName = None
-          )
+        searchKeys = SearchKeys(
+          identifier = Some(NINO(identifier)),
+          companyName = None
+        )
       )
     )
   }
-
 
 }
