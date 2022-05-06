@@ -16,8 +16,7 @@
 
 package mocks
 
-import java.time.OffsetDateTime
-
+import org.joda.time.DateTime
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import utils.CurrentDateTime
@@ -27,7 +26,7 @@ trait MockCurrentDateTime extends MockFactory {
   val mockCurrentDateTime: CurrentDateTime = mock[CurrentDateTime]
 
   object MockCurrentDateTime {
-    def getCurrentDate: CallHandler[OffsetDateTime] = (mockCurrentDateTime.getDateTime _).expects()
+    def getCurrentDate: CallHandler[DateTime] = (mockCurrentDateTime.getDateTime _).expects()
   }
 
 }

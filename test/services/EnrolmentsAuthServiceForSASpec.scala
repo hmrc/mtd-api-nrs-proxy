@@ -19,7 +19,7 @@ package services
 import fixtures.AuthFixture._
 import mocks.{MockAppConfig, MockAuthConnector}
 import models.errors.{DownstreamError, MtdError}
-import java.time.LocalDate
+import org.joda.time.LocalDate
 import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Individual, Organisation}
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
