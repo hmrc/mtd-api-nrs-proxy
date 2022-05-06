@@ -16,7 +16,7 @@
 
 package models.request
 
-import java.time.{LocalDate}
+import java.time.LocalDate
 
 import play.api.libs.json.{Json, OFormat, Reads, Writes}
 import uk.gov.hmrc.auth.core.retrieve._
