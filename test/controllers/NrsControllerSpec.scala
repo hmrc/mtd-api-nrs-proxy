@@ -16,15 +16,15 @@
 
 package controllers
 
+import java.time.OffsetDateTime
+
 import com.kenshoo.play.metrics.Metrics
 import mocks._
 import models.auth.UserDetails
-import models.errors.{DownstreamError, BadRequestError}
-import org.joda.time.DateTime
+import models.errors.{BadRequestError, DownstreamError}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
-import utils.DateUtils
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -37,8 +37,8 @@ class NrsControllerSpec
     with MockIdGenerator
     with MockMtdIdLookupService {
 
-  val date: DateTime        = DateTime.parse("2017-01-01T00:00:00.000Z")
-  val fmt: String           = DateUtils.dateTimePattern
+  val date: OffsetDateTime  = OffsetDateTime.parse("2017-01-01T00:00:00.000Z")
+  val fmt: String           = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
   val nino: String          = "AA123456A"
   val vrn: String           = "123456789"
   val notableEvent: String  = "submit"
