@@ -16,18 +16,17 @@
 
 package services
 
-import java.time.OffsetDateTime
-
 import com.kenshoo.play.metrics.Metrics
 import controllers.UserRequest
 import mocks.{MockMetrics, MockNrsConnector}
 import models.auth.UserDetails
 import models.request.{Metadata, NINO, NrsSubmission, SearchKeys}
 import models.response.{NrsFailure, NrsResponse}
+import org.joda.time.DateTime
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import utils.NrsTestData.IdentityDataTestData
-import utils.{DateUtils, MockHashUtil}
+import utils.MockHashUtil
 
 import scala.concurrent.Future
 
@@ -38,9 +37,7 @@ class NrsServiceSpec extends ServiceSpec with MockNrsConnector with MockHashUtil
   private val nino: String         = "AA111111A"
   private val notableEvent: String = "submit"
 
-  private val timestamp: OffsetDateTime = OffsetDateTime.parse("2018-04-07T12:13:25.156Z")
-  private val formattedDate: String = timestamp.format(DateUtils.isoInstantDatePattern)
-
+  private val timestamp: DateTime = DateTime.parse("2018-04-07T12:13:25.156Z")
 
   private val submitRequestBodyString = Json.toJson("""{
       |"test":"test123"
@@ -59,7 +56,7 @@ class NrsServiceSpec extends ServiceSpec with MockNrsConnector with MockHashUtil
         notableEvent = notableEvent,
         payloadContentType = "application/json",
         payloadSha256Checksum = checksum,
-        userSubmissionTimestamp = formattedDate,
+        userSubmissionTimestamp = timestamp,
         identityData = Some(IdentityDataTestData.correctModel),
         userAuthToken = "Bearer aaaa",
         headerData = Json.toJson(
