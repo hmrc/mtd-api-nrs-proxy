@@ -16,7 +16,7 @@
 
 package models.request
 
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import play.api.libs.json._
 import utils.DateUtils
 
