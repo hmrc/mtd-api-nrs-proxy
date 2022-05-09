@@ -18,6 +18,7 @@ package utils
 
 
 import play.api.libs.json._
+
 import java.time.format.DateTimeFormatter
 import java.time.{LocalDate, OffsetDateTime}
 import scala.util.{Failure, Success, Try}
@@ -79,6 +80,12 @@ object DateUtils {
       Try(JsSuccess(LocalDate.parse(json.as[String], datePattern), JsPath)).getOrElse(JsError())
   }
 
+  implicit def dateFormat: Format[LocalDate] = new Format[LocalDate] {
+    def writes(localDate: LocalDate): JsValue = JsString(localDate.format(datePattern))
+
+    override def reads(json: JsValue): JsResult[LocalDate] =
+      Try(JsSuccess(LocalDate.parse(json.as[String], datePattern), JsPath)).getOrElse(JsError())
+  }
 
 
 }

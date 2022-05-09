@@ -16,8 +16,9 @@
 
 package utils
 
+import java.time.{Instant, LocalDate}
+
 import models.request.{IdentityData, Metadata, NINO, NrsSubmission, SearchKeys, VRN}
-import org.joda.time.{DateTime, DateTimeZone, LocalDate}
 import play.api.libs.json.{JsObject, JsValue, Json}
 import uk.gov.hmrc.auth.core.AffinityGroup.Agent
 import uk.gov.hmrc.auth.core.retrieve._
@@ -83,8 +84,9 @@ object NrsTestData {
       affinityGroup = Some(Agent),
       credentialStrength = Some("strong"),
       loginTimes = LoginTimes(
-        DateTime.parse("2016-11-27T09:00:00Z").withZone(DateTimeZone.UTC),
-        Some(DateTime.parse("2016-11-01T12:00:00Z").withZone(DateTimeZone.UTC))
+        Instant.parse("2016-11-27T09:00:00Z"),
+        Some(Instant.parse("2016-11-01T12:00:00Z")
+        )
       )
     )
 
@@ -125,7 +127,7 @@ object NrsTestData {
       notableEvent = "submit",
       payloadContentType = "application/json",
       payloadSha256Checksum = "2c98a3e52aed1f06728e35e4f47699bd4af6f328c3dabfde998007382dba86ce",
-      userSubmissionTimestamp = DateTime.parse("2018-04-07T12:13:25Z"),
+      userSubmissionTimestamp = "2018-04-07T12:13:25Z",
       identityData = None,
       userAuthToken = "Bearer AbCdEf123456...",
       headerData = Json.toJson(

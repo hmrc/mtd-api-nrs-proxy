@@ -16,27 +16,27 @@
 
 package services
 
+import java.time.OffsetDateTime
+
 import com.kenshoo.play.metrics.Metrics
 import connectors.NrsConnector
 import controllers.UserRequest
-
 import javax.inject.{Inject, Singleton}
 import models.request.{Metadata, NINO, NrsSubmission, SearchKeys}
-import org.joda.time.DateTime
 import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.http.HeaderCarrier
-import utils.{HashUtil, Logging, Timer}
+import utils.{DateUtils, HashUtil, Logging, Timer}
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class NrsService @Inject() (connector: NrsConnector, hashUtil: HashUtil, override val metrics: Metrics) extends Timer with Logging {
 
-  def submit(identifier: String, notableEvent: String, body: JsValue, generatedNrsId: String, submissionTimestamp: DateTime)(implicit
-      request: UserRequest[_],
-      hc: HeaderCarrier,
-      ec: ExecutionContext,
-      correlationId: String): Future[Unit] = {
+  def submit(identifier: String, notableEvent: String, body: JsValue, generatedNrsId: String, submissionTimestamp: OffsetDateTime)(implicit
+                                                                                                                                   request: UserRequest[_],
+                                                                                                                                   hc: HeaderCarrier,
+                                                                                                                                   ec: ExecutionContext,
+                                                                                                                                   correlationId: String): Future[Unit] = {
 
     val nrsSubmission = buildItsaNrsSubmission(identifier, notableEvent, body, submissionTimestamp, request)
 
@@ -55,12 +55,14 @@ class NrsService @Inject() (connector: NrsConnector, hashUtil: HashUtil, overrid
   def buildItsaNrsSubmission(identifier: String,
                              notableEvent: String,
                              body: JsValue,
-                             submissionTimestamp: DateTime,
+                             submissionTimestamp: OffsetDateTime,
                              request: UserRequest[_]): NrsSubmission = {
 
     val payloadString  = body.toString()
     val encodedPayload = hashUtil.encode(payloadString)
     val sha256Checksum = hashUtil.getHash(payloadString)
+    val formattedDate = submissionTimestamp.format(DateUtils.isoInstantDatePattern)
+
 
     NrsSubmission(
       payload = encodedPayload,
@@ -69,7 +71,7 @@ class NrsService @Inject() (connector: NrsConnector, hashUtil: HashUtil, overrid
         notableEvent = s"$notableEvent",
         payloadContentType = "application/json",
         payloadSha256Checksum = sha256Checksum,
-        userSubmissionTimestamp = submissionTimestamp,
+        userSubmissionTimestamp = formattedDate,
         identityData = request.userDetails.identityData,
         userAuthToken = request.headers.get("Authorization").get,
         headerData = Json.toJson(request.headers.toMap.map { h => h._1 -> h._2.head }),
