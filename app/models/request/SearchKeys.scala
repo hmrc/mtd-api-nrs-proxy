@@ -26,7 +26,7 @@ case class SearchKeys(identifier: Option[Identifier] = None,
                       periodKey: Option[String] = None)
 
 object SearchKeys {
-  implicit val dateFormats: Format[LocalDate] = DateUtils.dateFormat
+  implicit val dateReads: Reads[LocalDate] = DateUtils.dateReads
 
   implicit val writes: OWrites[SearchKeys] = (o: SearchKeys) =>
     JsObject.apply(
