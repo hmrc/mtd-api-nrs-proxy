@@ -17,7 +17,8 @@
 package utils
 
 import models.request.{IdentityData, Metadata, NINO, NrsSubmission, SearchKeys, VRN}
-import org.joda.time.{DateTime, DateTimeZone, LocalDate}
+import org.joda.time.{DateTime, LocalDate => JodaLocalDate}
+import java.time.{Instant, LocalDate}
 import play.api.libs.json.{JsObject, JsValue, Json}
 import uk.gov.hmrc.auth.core.AffinityGroup.Agent
 import uk.gov.hmrc.auth.core.retrieve._
@@ -83,9 +84,10 @@ object NrsTestData {
       affinityGroup = Some(Agent),
       credentialStrength = Some("strong"),
       loginTimes = LoginTimes(
-        DateTime.parse("2016-11-27T09:00:00Z").withZone(DateTimeZone.UTC),
-        Some(DateTime.parse("2016-11-01T12:00:00Z").withZone(DateTimeZone.UTC))
+        Instant.parse("2016-11-27T09:00:00Z"),
+        Some(Instant.parse("2016-11-01T12:00:00Z")
       )
+    )
     )
 
   }
@@ -163,7 +165,7 @@ object NrsTestData {
       SearchKeys(
         identifier = Some(NINO("identifier")),
         companyName = Some("Good, Bad & Ugly Ltd"),
-        taxPeriodEndDate = Some(LocalDate.parse("2018-06-04")),
+        taxPeriodEndDate = Some(JodaLocalDate.parse("2018-06-04")),
         periodKey = Some("period key")
       )
 

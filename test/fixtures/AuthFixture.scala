@@ -18,7 +18,7 @@ package fixtures
 
 import models.auth.UserDetails
 import models.request.IdentityData
-import org.joda.time.{DateTime, LocalDate}
+import java.time.{Instant, LocalDate}
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.retrieve._
 
@@ -140,7 +140,7 @@ object AuthFixture {
       affinityGroup = Some(AffinityGroup.Organisation),
       credentialStrength = Some("strong"),
       loginTimes = LoginTimes(
-        currentLogin = DateTime.parse("2018-04-16T11:00:55Z"),
+        currentLogin = Instant.parse("2018-04-16T11:00:55Z"),
         previousLogin = None
       )
     )
@@ -229,7 +229,7 @@ object AuthFixture {
             countryCode = None),
           affinityGroup = Some(Individual),
           credentialStrength = Some("strong"),
-          loginTimes = LoginTimes(currentLogin = DateTime.parse("2018-04-16T11:00:55.000Z"), previousLogin = None)
+          loginTimes = LoginTimes(currentLogin = Instant.parse("2018-04-16T11:00:55.000Z"), previousLogin = None)
         ))
     )
 

@@ -16,11 +16,10 @@
 
 package models.request
 
-import org.joda.time.{DateTime, LocalDate}
-import play.api.libs.json.{Format, Json, OFormat}
+import java.time.LocalDate
+import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.auth.core.retrieve._
 import uk.gov.hmrc.auth.core.{AffinityGroup, ConfidenceLevel, CredentialRole}
-import utils.DateUtils
 
 case class IdentityData(internalId: Option[String] = None,
                         externalId: Option[String] = None,
@@ -44,14 +43,12 @@ case class IdentityData(internalId: Option[String] = None,
                         loginTimes: LoginTimes)
 
 object IdentityData {
-  implicit val localDateFormats: Format[LocalDate]        = DateUtils.dateFormat
   implicit val credFormat: OFormat[Credentials]           = Json.format[Credentials]
   implicit val nameFormat: OFormat[Name]                  = Json.format[Name]
   implicit val agentInfoFormat: OFormat[AgentInformation] = Json.format[AgentInformation]
   implicit val mdtpInfoFormat: OFormat[MdtpInformation]   = Json.format[MdtpInformation]
   implicit val itmpNameFormat: OFormat[ItmpName]          = Json.format[ItmpName]
   implicit val itmpAddressFormat: OFormat[ItmpAddress]    = Json.format[ItmpAddress]
-  implicit val dateTimeFormats: Format[DateTime]          = DateUtils.isoInstantDateFormat
   implicit val loginTimesFormat: OFormat[LoginTimes]      = Json.format[LoginTimes]
   implicit val format: OFormat[IdentityData]              = Json.format[IdentityData]
 }
