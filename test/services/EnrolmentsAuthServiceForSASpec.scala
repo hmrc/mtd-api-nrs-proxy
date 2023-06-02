@@ -26,7 +26,6 @@ import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve._
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
 
-import scala.collection.Seq
 import scala.concurrent.Future
 
 class EnrolmentsAuthServiceForSASpec extends ServiceSpec with MockAppConfig {

@@ -22,8 +22,6 @@ import java.time.{Instant, LocalDate}
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.retrieve._
 
-import scala.collection.Seq
-
 object AuthFixture {
 
   val vatEnrolments: Enrolments =
