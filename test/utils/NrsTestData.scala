@@ -85,9 +85,8 @@ object NrsTestData {
       credentialStrength = Some("strong"),
       loginTimes = LoginTimes(
         Instant.parse("2016-11-27T09:00:00Z"),
-        Some(Instant.parse("2016-11-01T12:00:00Z")
+        Some(Instant.parse("2016-11-01T12:00:00Z"))
       )
-    )
     )
 
   }
