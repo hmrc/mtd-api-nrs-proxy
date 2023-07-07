@@ -18,9 +18,10 @@ package fixtures
 
 import models.auth.UserDetails
 import models.request.IdentityData
-import java.time.{Instant, LocalDate}
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.retrieve._
+
+import java.time.{Instant, LocalDate}
 
 object AuthFixture {
 

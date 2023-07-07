@@ -16,8 +16,6 @@
 
 package utils
 
-import java.util.concurrent.TimeUnit
-
 import akka.actor.{ActorSystem, Scheduler}
 import com.google.common.base.Stopwatch
 import org.scalatest.concurrent.ScalaFutures
@@ -27,6 +25,7 @@ import play.api.test.Injecting
 import play.api.{Application, Environment, Mode}
 import support.UnitSpec
 
+import java.util.concurrent.TimeUnit
 import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future, TimeoutException}
 import scala.util.control.NoStackTrace

@@ -19,7 +19,6 @@ package utils
 import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
 import java.util.Base64
-
 import javax.inject.{Inject, Singleton}
 
 @Singleton

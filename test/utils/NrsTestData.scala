@@ -16,13 +16,14 @@
 
 package utils
 
-import models.request.{IdentityData, Metadata, NINO, NrsSubmission, SearchKeys, VRN}
+import models.request._
 import org.joda.time.{DateTime, LocalDate => JodaLocalDate}
-import java.time.{Instant, LocalDate}
 import play.api.libs.json.{JsObject, JsValue, Json}
 import uk.gov.hmrc.auth.core.AffinityGroup.Agent
 import uk.gov.hmrc.auth.core.retrieve._
 import uk.gov.hmrc.auth.core.{ConfidenceLevel, User}
+
+import java.time.{Instant, LocalDate}
 
 object NrsTestData {
 

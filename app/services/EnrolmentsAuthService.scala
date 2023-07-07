@@ -17,7 +17,6 @@
 package services
 
 import config.AppConfig
-import javax.inject.{Inject, Singleton}
 import models.auth.UserDetails
 import models.errors.{DownstreamError, MtdError}
 import models.request.IdentityData
@@ -28,6 +27,7 @@ import uk.gov.hmrc.auth.core.retrieve.{ItmpAddress, ItmpName, ~}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton

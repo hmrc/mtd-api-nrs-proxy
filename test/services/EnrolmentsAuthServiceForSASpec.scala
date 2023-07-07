@@ -19,13 +19,13 @@ package services
 import fixtures.AuthFixture._
 import mocks.{MockAppConfig, MockAuthConnector}
 import models.errors.{DownstreamError, MtdError}
-import java.time.LocalDate
 import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Individual, Organisation}
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve._
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
 
+import java.time.LocalDate
 import scala.concurrent.Future
 
 class EnrolmentsAuthServiceForSASpec extends ServiceSpec with MockAppConfig {

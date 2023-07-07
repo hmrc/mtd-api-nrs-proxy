@@ -16,10 +16,11 @@
 
 package models.request
 
-import java.time.LocalDate
 import play.api.libs.json.{Json, OFormat}
 import uk.gov.hmrc.auth.core.retrieve._
 import uk.gov.hmrc.auth.core.{AffinityGroup, ConfidenceLevel, CredentialRole}
+
+import java.time.LocalDate
 
 case class IdentityData(internalId: Option[String] = None,
                         externalId: Option[String] = None,

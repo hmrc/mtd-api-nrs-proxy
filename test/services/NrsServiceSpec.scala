@@ -25,8 +25,8 @@ import models.response.{NrsFailure, NrsResponse}
 import org.joda.time.DateTime
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
-import utils.NrsTestData.IdentityDataTestData
 import utils.MockHashUtil
+import utils.NrsTestData.IdentityDataTestData
 
 import scala.concurrent.Future
 

@@ -32,9 +32,8 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsValue, Json}
 import play.api.test.Injecting
 import play.api.{Application, Environment, Mode}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import utils.NrsTestData.FullRequestTestData
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.http.HttpClient
 
 import scala.concurrent.duration.{FiniteDuration, _}
 
