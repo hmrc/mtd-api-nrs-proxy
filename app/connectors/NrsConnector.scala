@@ -18,15 +18,14 @@ package connectors
 
 import akka.actor.Scheduler
 import config.AppConfig
-import javax.inject.{Inject, Singleton}
 import models.request.NrsSubmission
 import models.response.{NrsFailure, NrsResponse}
 import play.api.http.Status
 import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
-import uk.gov.hmrc.http.HttpClient
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 import utils.{Delayer, Logging, Retrying}
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 import scala.util.{Success, Try}

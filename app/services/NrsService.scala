@@ -19,14 +19,13 @@ package services
 import com.kenshoo.play.metrics.Metrics
 import connectors.NrsConnector
 import controllers.UserRequest
-
-import javax.inject.{Inject, Singleton}
 import models.request.{Metadata, NINO, NrsSubmission, SearchKeys}
 import org.joda.time.DateTime
 import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.{HashUtil, Logging, Timer}
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton

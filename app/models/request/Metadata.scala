@@ -17,7 +17,7 @@
 package models.request
 
 import org.joda.time.DateTime
-import play.api.libs.json.{Format, JsValue, Json, OFormat, OWrites}
+import play.api.libs.json._
 import utils.DateUtils
 
 case class Metadata(businessId: String,

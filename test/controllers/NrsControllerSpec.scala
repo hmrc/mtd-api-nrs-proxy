@@ -19,7 +19,7 @@ package controllers
 import com.kenshoo.play.metrics.Metrics
 import mocks._
 import models.auth.UserDetails
-import models.errors.{DownstreamError, BadRequestError}
+import models.errors.{BadRequestError, DownstreamError}
 import org.joda.time.DateTime
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result

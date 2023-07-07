@@ -16,12 +16,12 @@
 
 package controllers
 
-import javax.inject.{Inject, Singleton}
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
 import services.{EnrolmentsAuthService, MtdIdLookupService, NrsService}
 import utils.{CurrentDateTime, IdGenerator, Logging}
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton

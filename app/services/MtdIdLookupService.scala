@@ -17,11 +17,11 @@
 package services
 
 import connectors.{MtdIdLookupConnector, MtdIdLookupOutcome}
-import javax.inject.{Inject, Singleton}
+import models.domain.Nino
 import models.errors.NinoFormatError
 import uk.gov.hmrc.http.HeaderCarrier
-import models.domain.Nino
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
