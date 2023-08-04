@@ -45,7 +45,7 @@ object AuthStub extends WireMockMethods {
                                                         |  "internalId": "some-id",
                                                         |  "externalId": "some-id",
                                                         |  "credentials" : {"providerId":"8124873381064832", "providerType":"GovernmentGateway"},
-                                                        |  "confidenceLevel": 200,
+                                                        |  "confidenceLevel": 250,
                                                         |  "name": { "name": "test", "lastName": "test" },
                                                         |  "dateOfBirth": "1985-01-01",
                                                         |  "postCode":"NW94HD",

@@ -101,7 +101,7 @@ object AuthFixture {
           providerId = "8124873381064832",
           providerType = "GovernmentGateway"
         )),
-      confidenceLevel = ConfidenceLevel.L200,
+      confidenceLevel = ConfidenceLevel.L250,
       nino = None,
       saUtr = None,
       name = Some(
@@ -205,7 +205,7 @@ object AuthFixture {
           externalId = Some("Ext-c4ebc935-ac7a-4cc2-950a-19e6fac91f2a"),
           agentCode = agentInformation.agentCode,
           credentials = Some(Credentials("8124873381064832", "GovernmentGateway")),
-          confidenceLevel = ConfidenceLevel.L200,
+          confidenceLevel = ConfidenceLevel.L250,
           nino = None,
           saUtr = None,
           name = Some(Name(name = Some("TestUser"), lastName = None)),
