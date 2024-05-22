@@ -16,7 +16,6 @@
 
 package controllers
 
-import com.kenshoo.play.metrics.Metrics
 import mocks._
 import models.auth.UserDetails
 import models.errors.{BadRequestError, DownstreamError}
@@ -24,6 +23,7 @@ import org.joda.time.DateTime
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.bootstrap.metrics.Metrics
 import utils.DateUtils
 
 import scala.concurrent.ExecutionContext.Implicits.global

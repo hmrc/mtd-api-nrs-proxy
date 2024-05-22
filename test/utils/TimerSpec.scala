@@ -16,10 +16,10 @@
 
 package utils
 
-import com.kenshoo.play.metrics.Metrics
 import mocks.MockMetrics
 import org.scalatest.matchers.Matcher
 import support.UnitSpec
+import uk.gov.hmrc.play.bootstrap.metrics.Metrics
 
 import scala.concurrent.ExecutionContext.Implicits.global
 

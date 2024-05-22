@@ -17,7 +17,7 @@
 package utils
 
 import com.codahale.metrics._
-import com.kenshoo.play.metrics.Metrics
+import uk.gov.hmrc.play.bootstrap.metrics.Metrics
 
 import scala.concurrent.{ExecutionContext, Future}
 

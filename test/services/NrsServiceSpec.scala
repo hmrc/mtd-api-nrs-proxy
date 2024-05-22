@@ -16,7 +16,6 @@
 
 package services
 
-import com.kenshoo.play.metrics.Metrics
 import controllers.UserRequest
 import mocks.{MockMetrics, MockNrsConnector}
 import models.auth.UserDetails
@@ -25,6 +24,7 @@ import models.response.{NrsFailure, NrsResponse}
 import org.joda.time.DateTime
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
+import uk.gov.hmrc.play.bootstrap.metrics.Metrics
 import utils.MockHashUtil
 import utils.NrsTestData.IdentityDataTestData
 

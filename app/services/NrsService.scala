@@ -16,13 +16,13 @@
 
 package services
 
-import com.kenshoo.play.metrics.Metrics
 import connectors.NrsConnector
 import controllers.UserRequest
 import models.request.{Metadata, NINO, NrsSubmission, SearchKeys}
 import org.joda.time.DateTime
 import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.bootstrap.metrics.Metrics
 import utils.{HashUtil, Logging, Timer}
 
 import javax.inject.{Inject, Singleton}

@@ -31,12 +31,13 @@ object AppDependencies {
   )
 
   def test(scope: String = "test, it"): Seq[sbt.ModuleID] = Seq(
-    "uk.gov.hmrc"         %% "bootstrap-test-play-30" % bootstrapPlay30Version % scope,
-    "org.playframework"   %% "play-test"              % current                % scope,
-    "org.scalatest"       %% "scalatest"              % "3.2.15"               % scope,
-    "com.vladsch.flexmark" % "flexmark-all"           % "0.64.6"               % scope,
-    "org.scalamock"       %% "scalamock"              % "5.2.0"                % scope,
-    "com.miguno.akka"     %% "akka-mock-scheduler"    % "0.5.5"                % scope
+    "uk.gov.hmrc"          %% "bootstrap-test-play-30" % bootstrapPlay30Version % scope,
+    "org.playframework"    %% "play-test"              % current                % scope,
+    "org.scalatest"        %% "scalatest"              % "3.2.15"               % scope,
+    "com.vladsch.flexmark"  % "flexmark-all"           % "0.64.6"               % scope,
+    "org.scalamock"        %% "scalamock"              % "5.2.0"                % scope,
+    "com.miguno.akka"      %% "akka-mock-scheduler"    % "0.5.5"                % scope,
+    "com.github.pjfanning" %% "pekko-mock-scheduler"   % "0.6.0"                % scope
   )
 
 }
