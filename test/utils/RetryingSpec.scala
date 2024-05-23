@@ -16,8 +16,9 @@
 
 package utils
 
-import akka.actor.{ActorSystem, Scheduler}
+
 import com.google.common.base.Stopwatch
+import org.apache.pekko.actor.{ActorSystem, Scheduler}
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.inject.guice.GuiceApplicationBuilder

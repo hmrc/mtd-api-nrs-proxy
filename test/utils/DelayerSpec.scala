@@ -16,8 +16,7 @@
 
 package utils
 
-import akka.actor.Scheduler
-import com.miguno.akka.testing.VirtualTime
+import com.github.pjfanning.pekko.scheduler.mock.{MockScheduler, VirtualTime}
 import support.UnitSpec
 
 import scala.concurrent.ExecutionContext
@@ -25,12 +24,12 @@ import scala.concurrent.duration._
 
 class DelayerSpec extends UnitSpec {
 
-  val virtualTime                       = new VirtualTime
-  implicit val mockScheduler: Scheduler = virtualTime.scheduler
+  val virtualTime                           = new VirtualTime
+  implicit val mockScheduler: MockScheduler = virtualTime.scheduler
 
   val delayer: Delayer = new Delayer {
-    override implicit val scheduler: Scheduler = mockScheduler
-    override implicit val ec: ExecutionContext = ExecutionContext.global
+    override implicit val scheduler: MockScheduler = mockScheduler
+    override implicit val ec: ExecutionContext     = ExecutionContext.global
   }
 
   "delayer" must {

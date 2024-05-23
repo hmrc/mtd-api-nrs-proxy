@@ -16,10 +16,10 @@
 
 package connectors
 
-import akka.actor.Scheduler
 import config.AppConfig
 import models.request.NrsSubmission
 import models.response.{NrsFailure, NrsResponse}
+import org.apache.pekko.actor.Scheduler
 import play.api.http.Status
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}

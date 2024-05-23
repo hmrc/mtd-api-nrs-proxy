@@ -16,7 +16,6 @@
 
 package connectors
 
-import akka.actor.{ActorSystem, Scheduler}
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
@@ -25,6 +24,7 @@ import com.github.tomakehurst.wiremock.stubbing.Scenario.STARTED
 import mocks.MockAppConfig
 import models.request.NrsSubmission
 import models.response.{NrsFailure, NrsResponse}
+import org.apache.pekko.actor.{ActorSystem, Scheduler}
 import org.scalatest.BeforeAndAfterAll
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.http.MimeTypes

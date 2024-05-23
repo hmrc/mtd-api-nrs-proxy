@@ -16,8 +16,8 @@
 
 package config
 
-import akka.actor.{ActorSystem, Scheduler}
 import com.google.inject.{AbstractModule, Provides}
+import org.apache.pekko.actor.{ActorSystem, Scheduler}
 
 class DIModule extends AbstractModule {
 
