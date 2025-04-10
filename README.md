@@ -17,7 +17,7 @@ the proxy handles the retry mechanisms and error handling.
 
 Run the microservice from the console using: `sbt run` (starts on port 7794 by default)
 
-Start the service manager profile: `sm --start MTD_API_NRS_PROXY`
+Start the service manager profile: `sm2 --start MTD_API_NRS_PROXY`
 
 ## Run Tests
 
