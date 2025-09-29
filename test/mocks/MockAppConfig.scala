@@ -23,7 +23,7 @@ import org.scalatest.TestSuite
 
 import scala.concurrent.duration.FiniteDuration
 
-trait MockAppConfig extends MockFactory { self: TestSuite =>
+trait MockAppConfig extends TestSuite with MockFactory {
 
   val mockAppConfig: AppConfig = mock[AppConfig]
 

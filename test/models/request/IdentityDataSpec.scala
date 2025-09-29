@@ -16,7 +16,7 @@
 
 package models.request
 
-import play.api.libs.json.{JsError, JsNumber, JsObject, JsSuccess, JsValue, Json}
+import play.api.libs.json.*
 import support.UnitSpec
 import uk.gov.hmrc.auth.core.retrieve.ItmpName
 import utils.NrsTestData.IdentityDataTestData.*
