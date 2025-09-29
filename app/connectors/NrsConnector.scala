@@ -21,17 +21,20 @@ import models.request.NrsSubmission
 import models.response.{NrsFailure, NrsResponse}
 import org.apache.pekko.actor.Scheduler
 import play.api.http.Status
-import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
+import play.api.libs.json.Json
+import uk.gov.hmrc.http.HttpReads.Implicits.*
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
 import utils.{Delayer, Logging, Retrying}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 import scala.util.{Success, Try}
+import play.api.libs.ws.WSBodyWritables.writeableOf_JsValue
 
 @Singleton
-class NrsConnector @Inject() (val httpClient: HttpClient, appConfig: AppConfig)(implicit val scheduler: Scheduler, val ec: ExecutionContext)
+class NrsConnector @Inject() (val httpClient: HttpClientV2, appConfig: AppConfig)(implicit val scheduler: Scheduler, val ec: ExecutionContext)
     extends Retrying
     with Delayer
     with Logging {
@@ -50,7 +53,11 @@ class NrsConnector @Inject() (val httpClient: HttpClient, appConfig: AppConfig)(
       logger.info(s"Attempt $attemptNumber NRS submission: sending POST request to $url")
 
       httpClient
-        .POST[NrsSubmission, HttpResponse](url, nrsSubmission, Seq("X-API-Key" -> apiKey))
+        .post(url"$url")
+        .setHeader("Content-Type" -> "application/json")
+        .setHeader("X-API-Key" -> apiKey)
+        .withBody(Json.toJson(nrsSubmission))
+        .execute[HttpResponse]
         .map { response =>
           val status = response.status
 

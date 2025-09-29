@@ -21,10 +21,11 @@ import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import services.MtdIdLookupService
 import uk.gov.hmrc.http.HeaderCarrier
+import org.scalatest.TestSuite
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockMtdIdLookupService extends MockFactory {
+trait MockMtdIdLookupService extends TestSuite with MockFactory {
 
   val mockMtdIdLookupService: MtdIdLookupService = mock[MtdIdLookupService]
 

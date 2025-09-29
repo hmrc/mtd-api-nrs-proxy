@@ -23,13 +23,15 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import stubs.{AuditStub, AuthStub, MtdIdLookupStub, NrsStub}
 import support.IntegrationBaseSpec
+import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
 
-class AuthISpec extends IntegrationBaseSpec {
+class NrsControllerISpec extends IntegrationBaseSpec {
 
   private trait Test {
-    val nino: String          = "AA123456A"
-    val notableEvent: String  = "itsa"
-    val correlationId: String = "X-123"
+
+    val nino: String                 = "AA123456A"
+    private val notableEvent: String = "itsa"
+    val correlationId: String        = "X-123"
 
     val requestBodyJson: JsValue = Json.parse(
       s"""
@@ -55,9 +57,7 @@ class AuthISpec extends IntegrationBaseSpec {
 
   val nrsSuccess: JsValue = Json.parse(s"""
        |{
-       |  "nrSubmissionId":"2dd537bc-4244-4ebf-bac9-96321be13cdc",
-       |  "cadesTSignature":"30820b4f06092a864886f70111111111c0445c464",
-       |  "timestamp":""
+       |  "nrSubmissionId":"2dd537bc-4244-4ebf-bac9-96321be13cdc"
        |}
          """.stripMargin)
 
@@ -74,50 +74,6 @@ class AuthISpec extends IntegrationBaseSpec {
 
         val response: WSResponse = await(request().post(requestBodyJson))
         response.status shouldBe OK
-      }
-    }
-
-    "an MTD ID is successfully retrieve from the NINO and the user is authorised" should {
-      "return 200" in new Test {
-        override def setupStubs(): StubMapping = {
-          AuditStub.audit()
-          AuthStub.authorised()
-          MtdIdLookupStub.ninoFound(nino)
-          NrsStub.onSuccess(NrsStub.POST, nrsUrl, ACCEPTED, nrsSuccess)
-        }
-
-        val response: WSResponse = await(request().post(requestBodyJson))
-        response.status shouldBe OK
-      }
-    }
-
-    "an MTD ID is successfully retrieve from the NINO and the user is NOT logged in" should {
-      "return 500" in new Test {
-        override val nino: String = "AA123456A"
-
-        override def setupStubs(): StubMapping = {
-          AuditStub.audit()
-          MtdIdLookupStub.ninoFound(nino)
-          AuthStub.unauthorisedNotLoggedIn()
-        }
-
-        val response: WSResponse = await(request().post(requestBodyJson))
-        response.status shouldBe INTERNAL_SERVER_ERROR
-      }
-    }
-
-    "an MTD ID is successfully retrieve from the NINO and the user is NOT authorised" should {
-      "return 500" in new Test {
-        override val nino: String = "AA123456A"
-
-        override def setupStubs(): StubMapping = {
-          AuditStub.audit()
-          MtdIdLookupStub.ninoFound(nino)
-          AuthStub.unauthorisedOther()
-        }
-
-        val response: WSResponse = await(request().post(requestBodyJson))
-        response.status shouldBe INTERNAL_SERVER_ERROR
       }
     }
   }

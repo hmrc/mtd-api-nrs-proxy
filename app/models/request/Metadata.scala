@@ -31,7 +31,7 @@ case class Metadata(businessId: String,
                     searchKeys: SearchKeys)
 
 object Metadata {
-  implicit val idformat: OFormat[IdentityData] = IdentityData.format
+  implicit val idformat: OFormat[IdentityData] = IdentityData.given_OFormat_IdentityData
   implicit val dateFormats: Format[DateTime]   = DateUtils.isoInstantDateFormat
   implicit val writes: OWrites[Metadata]       = Json.writes[Metadata]
 }

@@ -19,9 +19,10 @@ package mocks
 import org.joda.time.DateTime
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.TestSuite
 import utils.CurrentDateTime
 
-trait MockCurrentDateTime extends MockFactory {
+trait MockCurrentDateTime extends TestSuite with MockFactory {
 
   val mockCurrentDateTime: CurrentDateTime = mock[CurrentDateTime]
 

@@ -77,7 +77,7 @@ class NrsServiceSpec extends ServiceSpec with MockNrsConnector with MockHashUtil
 
   trait Test {
 
-    implicit val userRequest: UserRequest[_] =
+    implicit val userRequest: UserRequest[?] =
       UserRequest(
         userDetails = UserDetails(
           enrolmentIdentifier = "id",

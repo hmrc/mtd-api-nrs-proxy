@@ -32,7 +32,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class NrsService @Inject() (connector: NrsConnector, hashUtil: HashUtil, override val metrics: Metrics) extends Timer with Logging {
 
   def submit(identifier: String, notableEvent: String, body: JsValue, generatedNrsId: String, submissionTimestamp: DateTime)(implicit
-      request: UserRequest[_],
+      request: UserRequest[?],
       hc: HeaderCarrier,
       ec: ExecutionContext,
       correlationId: String): Future[Unit] = {
@@ -55,7 +55,7 @@ class NrsService @Inject() (connector: NrsConnector, hashUtil: HashUtil, overrid
                              notableEvent: String,
                              body: JsValue,
                              submissionTimestamp: DateTime,
-                             request: UserRequest[_]): NrsSubmission = {
+                             request: UserRequest[?]): NrsSubmission = {
 
     val payloadString  = body.toString()
     val encodedPayload = hashUtil.encode(payloadString)

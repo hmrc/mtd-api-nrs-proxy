@@ -21,6 +21,7 @@ import org.scalatest.matchers.Matcher
 import support.UnitSpec
 import uk.gov.hmrc.play.bootstrap.metrics.Metrics
 
+import scala.compiletime.uninitialized
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class TimerSpec extends UnitSpec {
@@ -28,7 +29,7 @@ class TimerSpec extends UnitSpec {
   class Test extends Timer with Logging {
     val metrics: Metrics = new MockMetrics
 
-    var timeMs: Long = _
+    var timeMs: Long = uninitialized
 
     override def stopAndLog[A](name: String, timer: com.codahale.metrics.Timer.Context): Unit =
       timeMs = timer.stop() / 1000000

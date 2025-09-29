@@ -29,4 +29,12 @@ trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames
 
   implicit val hc: HeaderCarrier    = HeaderCarrier()
   implicit val ec: ExecutionContext = scala.concurrent.ExecutionContext.global
+
+  val dummyHeaderCarrierConfig: HeaderCarrier.Config =
+    HeaderCarrier.Config(
+      List("^not-test-BaseUrl?$".r),
+      Seq.empty[String],
+      Some("this-api")
+    )
+
 }
