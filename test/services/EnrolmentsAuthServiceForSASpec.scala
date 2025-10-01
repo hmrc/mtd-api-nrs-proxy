@@ -16,14 +16,15 @@
 
 package services
 
-import fixtures.AuthFixture._
+import fixtures.AuthFixture.*
 import mocks.{MockAppConfig, MockAuthConnector}
+import models.auth.UserDetails
 import models.errors.{DownstreamError, MtdError}
 import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Individual, Organisation}
-import uk.gov.hmrc.auth.core._
+import uk.gov.hmrc.auth.core.*
 import uk.gov.hmrc.auth.core.authorise.Predicate
-import uk.gov.hmrc.auth.core.retrieve._
-import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
+import uk.gov.hmrc.auth.core.retrieve.*
+import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals.*
 
 import java.time.LocalDate
 import scala.concurrent.Future
@@ -39,9 +40,9 @@ class EnrolmentsAuthServiceForSASpec extends ServiceSpec with MockAppConfig {
 
     val authRetrievalsAffinityWithNrs: Retrieval[
       Option[AffinityGroup] ~ Enrolments ~ Option[String] ~ Option[String] ~ Option[String] ~ Option[Credentials] ~ ConfidenceLevel ~ Option[
-        String] ~ Option[String] ~ Option[Name] ~ Option[LocalDate] ~ Option[String] ~ AgentInformation ~ Option[String] ~ Option[
-        CredentialRole] ~ Option[MdtpInformation] ~ Option[String] ~ LoginTimes ~ Option[ItmpName] ~ Option[LocalDate] ~ Option[ItmpAddress]] =
-      affinityGroup and allEnrolments and internalId and externalId and agentCode and credentials and confidenceLevel and nino and saUtr and name and dateOfBirth and email and agentInformation and groupIdentifier and credentialRole and mdtpInformation and credentialStrength and loginTimes and itmpName and itmpDateOfBirth and itmpAddress
+        String] ~ Option[String] ~ Option[LocalDate] ~ Option[String] ~ AgentInformation ~ Option[String] ~ Option[CredentialRole] ~ Option[
+        MdtpInformation] ~ Option[String] ~ LoginTimes ~ Option[ItmpName] ~ Option[LocalDate] ~ Option[ItmpAddress]] =
+      affinityGroup and allEnrolments and internalId and externalId and agentCode and credentials and confidenceLevel and nino and saUtr and dateOfBirth and email and agentInformation and groupIdentifier and credentialRole and mdtpInformation and credentialStrength and loginTimes and itmpName and itmpDateOfBirth and itmpAddress
 
     val predicate: Predicate =
       Enrolment("HMRC-MTD-IT")
@@ -57,7 +58,8 @@ class EnrolmentsAuthServiceForSASpec extends ServiceSpec with MockAppConfig {
 
         private val retrievalsResultAffinity = authResponse(indIdentityData, saEnrolments)
 
-        val expected = Right(userDetails(Individual, AgentInformation(agentId = None, agentCode = None, agentFriendlyName = None)))
+        val expected: Right[Nothing, UserDetails] =
+          Right(userDetails(Individual, AgentInformation(agentId = None, agentCode = None, agentFriendlyName = None)))
 
         MockAuthConnector
           .authorised(predicate, authRetrievalsAffinityWithNrs)
@@ -74,7 +76,8 @@ class EnrolmentsAuthServiceForSASpec extends ServiceSpec with MockAppConfig {
 
         private val retrievalsResultAffinity = authResponse(orgIdentityData, saEnrolments)
 
-        val expected = Right(userDetails(Organisation, AgentInformation(agentId = None, agentCode = None, agentFriendlyName = None)))
+        val expected: Right[Nothing, UserDetails] =
+          Right(userDetails(Organisation, AgentInformation(agentId = None, agentCode = None, agentFriendlyName = None)))
 
         MockAuthConnector
           .authorised(predicate, authRetrievalsAffinityWithNrs)
@@ -91,7 +94,7 @@ class EnrolmentsAuthServiceForSASpec extends ServiceSpec with MockAppConfig {
 
         private val retrievalsResultAffinity = authResponse(agentIdentityData, saAgentEnrolments)
 
-        val expected =
+        val expected: Right[Nothing, UserDetails] =
           Right(userDetails(Agent, AgentInformation(agentCode = Some("AGENT007"), agentFriendlyName = Some("James"), agentId = Some("987654321"))))
 
         MockAuthConnector
@@ -147,7 +150,7 @@ class EnrolmentsAuthServiceForSASpec extends ServiceSpec with MockAppConfig {
             (UnmappedException(), DownstreamError)
           )
 
-        authServiceErrorMap.foreach(args => (serviceException _).tupled(args))
+        authServiceErrorMap.foreach(args => serviceException.tupled(args))
       }
     }
 
@@ -156,7 +159,8 @@ class EnrolmentsAuthServiceForSASpec extends ServiceSpec with MockAppConfig {
 
         private val retrievalsResultAffinity = authResponse(orgIdentityData.copy(affinityGroup = Some(Agent)), saEnrolments)
 
-        val expected = Right(userDetails(Agent, AgentInformation(agentCode = None, agentFriendlyName = None, agentId = None)))
+        val expected: Right[Nothing, UserDetails] =
+          Right(userDetails(Agent, AgentInformation(agentCode = None, agentFriendlyName = None, agentId = None)))
 
         MockAuthConnector
           .authorised(predicate, authRetrievalsAffinityWithNrs)

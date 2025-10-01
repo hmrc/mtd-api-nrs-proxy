@@ -29,7 +29,6 @@ case class IdentityData(internalId: Option[String] = None,
                         confidenceLevel: ConfidenceLevel,
                         nino: Option[String] = None,
                         saUtr: Option[String] = None,
-                        name: Option[Name] = None,
                         dateOfBirth: Option[LocalDate] = None,
                         email: Option[String] = None,
                         agentInformation: AgentInformation,
@@ -44,12 +43,11 @@ case class IdentityData(internalId: Option[String] = None,
                         loginTimes: LoginTimes)
 
 object IdentityData {
-  implicit val credFormat: OFormat[Credentials]           = Json.format[Credentials]
-  implicit val nameFormat: OFormat[Name]                  = Json.format[Name]
-  implicit val agentInfoFormat: OFormat[AgentInformation] = Json.format[AgentInformation]
-  implicit val mdtpInfoFormat: OFormat[MdtpInformation]   = Json.format[MdtpInformation]
-  implicit val itmpNameFormat: OFormat[ItmpName]          = Json.format[ItmpName]
-  implicit val itmpAddressFormat: OFormat[ItmpAddress]    = Json.format[ItmpAddress]
-  implicit val loginTimesFormat: OFormat[LoginTimes]      = Json.format[LoginTimes]
-  implicit val format: OFormat[IdentityData]              = Json.format[IdentityData]
+  given OFormat[Credentials]      = Json.format[Credentials]
+  given OFormat[AgentInformation] = Json.format[AgentInformation]
+  given OFormat[MdtpInformation]  = Json.format[MdtpInformation]
+  given OFormat[ItmpName]         = Json.format[ItmpName]
+  given OFormat[ItmpAddress]      = Json.format[ItmpAddress]
+  given OFormat[LoginTimes]       = Json.format[LoginTimes]
+  given OFormat[IdentityData]     = Json.format[IdentityData]
 }

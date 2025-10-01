@@ -39,7 +39,6 @@ object NrsTestData {
         |  "confidenceLevel": 250,
         |  "nino": "DH00475D",
         |  "saUtr": "Utr",
-        |  "name": { "name": "test", "lastName": "test" },
         |  "dateOfBirth": "1985-01-01",
         |  "email":"test@test.com",
         |  "agentInformation": {
@@ -72,7 +71,6 @@ object NrsTestData {
       confidenceLevel = ConfidenceLevel.L250,
       nino = Some("DH00475D"),
       saUtr = Some("Utr"),
-      name = Some(Name(Some("test"), Some("test"))),
       dateOfBirth = Some(LocalDate.parse("1985-01-01")),
       email = Some("test@test.com"),
       agentInformation = AgentInformation(agentCode = Some("TZRXXV"), agentFriendlyName = Some("Bodgitt & Legget LLP"), agentId = Some("BDGL")),
@@ -88,6 +86,26 @@ object NrsTestData {
         Instant.parse("2016-11-27T09:00:00Z"),
         Some(Instant.parse("2016-11-01T12:00:00Z"))
       )
+    )
+
+  }
+
+  object ItmpNameTestData {
+
+    val json: JsValue = Json.parse(
+      """
+        |{
+        |  "givenName": "John",
+        |  "middleName": "Michael",
+        |  "familyName": "Doe"
+        |}
+        |""".stripMargin
+    )
+
+    val model: ItmpName = ItmpName(
+      givenName = Some("John"),
+      middleName = Some("Michael"),
+      familyName = Some("Doe")
     )
 
   }

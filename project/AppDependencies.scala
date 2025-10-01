@@ -14,30 +14,23 @@
  * limitations under the License.
  */
 
-import play.core.PlayVersion
-import play.core.PlayVersion.current
-import play.sbt.PlayImport.*
+
 import sbt.*
 
 object AppDependencies {
 
-  val bootstrapPlay30Version = "8.1.0"
+  val bootstrapPlay30Version = "9.19.0"
 
   val compile: Seq[ModuleID] = Seq(
-    ws,
     "uk.gov.hmrc"                  %% "bootstrap-backend-play-30" % bootstrapPlay30Version,
-    "org.playframework"            %% "play-json-joda"            % "3.0.3",
-    "com.fasterxml.jackson.module" %% "jackson-module-scala"      % "2.17.1"
+    "org.playframework"            %% "play-json-joda"            % "3.0.5"
   )
 
-  def test(scope: String = "test, it"): Seq[sbt.ModuleID] = Seq(
-    "uk.gov.hmrc"          %% "bootstrap-test-play-30" % bootstrapPlay30Version % scope,
-    "org.playframework"    %% "play-test"              % current                % scope,
-    "org.scalatest"        %% "scalatest"              % "3.2.15"               % scope,
-    "com.vladsch.flexmark"  % "flexmark-all"           % "0.64.6"               % scope,
-    "org.scalamock"        %% "scalamock"              % "5.2.0"                % scope,
-    "com.miguno.akka"      %% "akka-mock-scheduler"    % "0.5.5"                % scope,
-    "com.github.pjfanning" %% "pekko-mock-scheduler"   % "0.6.0"                % scope
-  )
+  val test: Seq[sbt.ModuleID] = Seq(
+    "uk.gov.hmrc"         %% "bootstrap-test-play-30" % bootstrapPlay30Version,
+    "org.scalamock"       %% "scalamock"              % "7.5.0",
+    "com.github.pjfanning" %% "pekko-mock-scheduler"   % "0.6.0"
+
+  ).map(_ % Test)
 
 }

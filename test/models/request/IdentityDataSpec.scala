@@ -16,16 +16,50 @@
 
 package models.request
 
-import play.api.libs.json.Json
+import play.api.libs.json.*
 import support.UnitSpec
-import utils.NrsTestData.IdentityDataTestData._
+import uk.gov.hmrc.auth.core.retrieve.ItmpName
+import utils.NrsTestData.IdentityDataTestData.*
+import utils.NrsTestData.ItmpNameTestData.*
 
 class IdentityDataSpec extends UnitSpec {
 
-  "writes" should {
-    "parse correctly to json" in {
+  "IdentityData JSON format" should {
+
+    "write correctly to JSON" in {
       Json.toJson(correctModel) shouldBe correctJson
     }
+
+    "read correctly from JSON" in {
+      correctJson.as[IdentityData] shouldBe correctModel
+    }
+
+    "fail to read when fields have wrong types" in {
+      val invalidJson = correctJson.as[JsObject] + ("affinityGroup" -> JsNumber(123))
+      invalidJson.validate[IdentityData] shouldBe a[JsError]
+    }
+
+    "fail to deserialize when a required field is missing" in {
+      val invalidJson = correctJson.as[JsObject] - "confidenceLevel"
+      invalidJson.validate[IdentityData] shouldBe a[JsError]
+    }
+
+    "handle optional fields when absent" in {
+      val jsonWithoutOptional = correctJson.as[JsObject] - "email" - "nino" - "externalId"
+      jsonWithoutOptional.validate[IdentityData] shouldBe a[JsSuccess[?]]
+    }
+  }
+
+  "ItmpNameData JSON format" should {
+
+    "serialize to JSON correctly" in {
+      Json.toJson(model)(IdentityData.given_OFormat_ItmpName) shouldBe json
+    }
+
+    "deserialize from JSON correctly" in {
+      json.as[ItmpName](IdentityData.given_OFormat_ItmpName) shouldBe model
+    }
+
   }
 
 }

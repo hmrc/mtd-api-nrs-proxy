@@ -8,9 +8,9 @@ the proxy handles the retry mechanisms and error handling.
 
 ## Requirements
 
-- Scala 2.13.x
+- Scala 3.5.x
 - Java 11
-- sbt 1.7.x
+- sbt 1.10.x
 - [Service Manager V2](https://github.com/hmrc/sm2)
 
 ## Development Setup
@@ -23,9 +23,9 @@ Start the service manager profile: `sm2 --start MTD_API_NRS_PROXY`
 
 Run unit tests: `sbt test`
 
-Run integration tests: `sbt it:test`
+Run integration tests: `sbt it/test`
 
-Run all tests with coverage: `sbt clean coverage test it:test coverageReport`
+Run all tests with coverage: `sbt clean coverage test it/test coverageReport`
 
 ### License
 

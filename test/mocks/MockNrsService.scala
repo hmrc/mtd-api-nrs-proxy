@@ -23,10 +23,11 @@ import org.scalamock.scalatest.MockFactory
 import play.api.libs.json.JsValue
 import services.NrsService
 import uk.gov.hmrc.http.HeaderCarrier
+import org.scalatest.TestSuite
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockNrsService extends MockFactory {
+trait MockNrsService extends TestSuite with MockFactory {
 
   val mockNrsService: NrsService = mock[NrsService]
 
@@ -34,7 +35,7 @@ trait MockNrsService extends MockFactory {
 
     def submit(identifier: String, notableEvent: String, body: JsValue, nrsId: String, dateTime: DateTime): CallHandler[Future[Unit]] = {
       (mockNrsService
-        .submit(_: String, _: String, _: JsValue, _: String, _: DateTime)(_: UserRequest[_], _: HeaderCarrier, _: ExecutionContext, _: String))
+        .submit(_: String, _: String, _: JsValue, _: String, _: DateTime)(_: UserRequest[?], _: HeaderCarrier, _: ExecutionContext, _: String))
         .expects(identifier, *, *, *, *, *, *, *, *)
     }
 

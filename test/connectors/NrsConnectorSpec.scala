@@ -17,7 +17,7 @@
 package connectors
 
 import com.github.tomakehurst.wiremock.WireMockServer
-import com.github.tomakehurst.wiremock.client.WireMock._
+import com.github.tomakehurst.wiremock.client.WireMock.*
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 import com.github.tomakehurst.wiremock.http.Fault
 import com.github.tomakehurst.wiremock.stubbing.Scenario.STARTED
@@ -27,15 +27,17 @@ import models.response.{NrsFailure, NrsResponse}
 import org.apache.pekko.actor.{ActorSystem, Scheduler}
 import org.scalatest.BeforeAndAfterAll
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import play.api
 import play.api.http.MimeTypes
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsValue, Json}
 import play.api.test.Injecting
 import play.api.{Application, Environment, Mode}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.bootstrap.HttpClientV2Module
 import utils.NrsTestData.FullRequestTestData
-
-import scala.concurrent.duration.{FiniteDuration, _}
+import scala.concurrent.duration.{FiniteDuration, *}
 
 class NrsConnectorSpec extends ConnectorSpec with BeforeAndAfterAll with GuiceOneAppPerSuite with Injecting with MockAppConfig {
 
@@ -45,13 +47,14 @@ class NrsConnectorSpec extends ConnectorSpec with BeforeAndAfterAll with GuiceOn
   override lazy val app: Application = new GuiceApplicationBuilder()
     .in(Environment.simple(mode = Mode.Dev))
     .configure("metrics.enabled" -> "false")
+    .overrides(new HttpClientV2Module)
     .build()
 
-  val httpClient: HttpClient = app.injector.instanceOf[HttpClient]
+  val httpClient: HttpClientV2 = app.injector.instanceOf[HttpClientV2]
 
   private val wireMockServer = new WireMockServer(WireMockConfiguration.wireMockConfig().dynamicPort())
 
-  var port: Int = _
+  lazy val port: Int = wireMockServer.port()
 
   val actorSystem: ActorSystem              = inject[ActorSystem]
   implicit val scheduler: Scheduler         = actorSystem.scheduler
@@ -65,13 +68,9 @@ class NrsConnectorSpec extends ConnectorSpec with BeforeAndAfterAll with GuiceOn
                  |   "nrSubmissionId": "submissionId"
                  |}""".stripMargin)
 
-  override def beforeAll(): Unit = {
-    wireMockServer.start()
-    port = wireMockServer.port()
-  }
+  override def beforeAll(): Unit = wireMockServer.start()
 
-  override def afterAll(): Unit =
-    wireMockServer.stop()
+  override def afterAll(): Unit = wireMockServer.stop()
 
   val url         = "/submission"
   val apiKeyValue = "api-key"
@@ -92,12 +91,13 @@ class NrsConnectorSpec extends ConnectorSpec with BeforeAndAfterAll with GuiceOn
           post(urlPathEqualTo(url))
             .withHeader("Content-Type", equalTo(MimeTypes.JSON))
             .withHeader("X-API-Key", equalTo(apiKeyValue))
-            .withRequestBody(equalToJson(nrsSubmissionJsonString, true, false))
+            .withRequestBody(equalToJson(nrsSubmissionJsonString))
             .willReturn(aResponse()
               .withBody(successResponseJson.toString)
               .withStatus(ACCEPTED)))
 
         await(connector.submit(nrsSubmission)) shouldBe Right(NrsResponse("submissionId"))
+
       }
     }
 
@@ -123,7 +123,7 @@ class NrsConnectorSpec extends ConnectorSpec with BeforeAndAfterAll with GuiceOn
               .withBody(successResponseJson.toString)
               .withStatus(ACCEPTED)))
 
-        await(connector.submit(nrsSubmission)) shouldBe Right(NrsResponse("submissionId"))
+        await(connector.submit(nrsSubmission)).shouldBe(Right(NrsResponse("submissionId")))
       }
 
       "give up after all retries" in new Test {
@@ -147,7 +147,7 @@ class NrsConnectorSpec extends ConnectorSpec with BeforeAndAfterAll with GuiceOn
             .willReturn(aResponse()
               .withStatus(BAD_REQUEST)))
 
-        await(connector.submit(nrsSubmission)) shouldBe Left(NrsFailure.ErrorResponse(BAD_REQUEST))
+        await(connector.submit(nrsSubmission)).shouldBe(Left(NrsFailure.ErrorResponse(BAD_REQUEST)))
       }
     }
 
@@ -160,7 +160,7 @@ class NrsConnectorSpec extends ConnectorSpec with BeforeAndAfterAll with GuiceOn
             .withHeader("X-API-Key", equalTo(apiKeyValue))
             .willReturn(aResponse().withFault(Fault.CONNECTION_RESET_BY_PEER)))
 
-        await(connector.submit(nrsSubmission)) shouldBe Left(NrsFailure.ExceptionThrown)
+        await(connector.submit(nrsSubmission)).shouldBe(Left(NrsFailure.ExceptionThrown))
       }
     }
 
@@ -176,7 +176,7 @@ class NrsConnectorSpec extends ConnectorSpec with BeforeAndAfterAll with GuiceOn
                           |}""".stripMargin)
               .withStatus(ACCEPTED)))
 
-        await(connector.submit(nrsSubmission)) shouldBe Left(NrsFailure.ExceptionThrown)
+        await(connector.submit(nrsSubmission)).shouldBe(Left(NrsFailure.ExceptionThrown))
       }
     }
   }

@@ -16,7 +16,6 @@
 
 package utils
 
-
 import com.google.common.base.Stopwatch
 import org.apache.pekko.actor.{ActorSystem, Scheduler}
 import org.scalatest.concurrent.ScalaFutures
@@ -25,6 +24,7 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.Injecting
 import play.api.{Application, Environment, Mode}
 import support.UnitSpec
+import uk.gov.hmrc.play.bootstrap.HttpClientV2Module
 
 import java.util.concurrent.TimeUnit
 import scala.concurrent.duration._
@@ -37,6 +37,7 @@ class RetryingSpec extends UnitSpec with ScalaFutures with GuiceOneAppPerSuite w
   override lazy val app: Application = new GuiceApplicationBuilder()
     .in(Environment.simple(mode = Mode.Dev))
     .configure("metrics.enabled" -> "false")
+    .overrides(new HttpClientV2Module)
     .build()
 
   val actorSystem: ActorSystem = inject[ActorSystem]
@@ -106,7 +107,7 @@ class RetryingSpec extends UnitSpec with ScalaFutures with GuiceOneAppPerSuite w
       val numRetries = 5
 
       val retryUnlessOk: Try[String] => Boolean = {
-        case Success(s) => !(s startsWith "Ok")
+        case Success(s) => !s.startsWith("Ok")
         case Failure(e) => true
       }
 
