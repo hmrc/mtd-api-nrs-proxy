@@ -101,8 +101,9 @@ class NrsConnectorSpec extends ConnectorSpec with BeforeAndAfterAll with GuiceOn
             .willReturn(aResponse()
               .withBody(successResponseJson.toString)
               .withStatus(ACCEPTED)))
+        
+        await(connector.submit(nrsSubmission)) shouldBe Right(NrsResponse("submissionId"))
 
-        await(connector.submit(nrsSubmission)).shouldBe(Right(NrsResponse("submissionId")))
       }
     }
 

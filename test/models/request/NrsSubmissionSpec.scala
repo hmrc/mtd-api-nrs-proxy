@@ -26,10 +26,6 @@ class NrsSubmissionSpec extends UnitSpec {
     "parse correctly to json" in {
       Json.toJson(correctModel) shouldBe correctJson
     }
-
-    "serialize correctly to JSON" in {
-      Json.toJson(correctModel) shouldBe correctJson
-    }
   }
 
 }

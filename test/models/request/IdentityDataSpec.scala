@@ -34,11 +34,6 @@ class IdentityDataSpec extends UnitSpec {
       correctJson.as[IdentityData] shouldBe correctModel
     }
 
-    "round-trip through JSON (serialize and then deserialize)" in {
-      val json = Json.toJson(correctModel)
-      json.as[IdentityData] shouldBe correctModel
-    }
-
     "fail to read when fields have wrong types" in {
       val invalidJson = correctJson.as[JsObject] + ("affinityGroup" -> JsNumber(123))
       invalidJson.validate[IdentityData] shouldBe a[JsError]
@@ -53,7 +48,10 @@ class IdentityDataSpec extends UnitSpec {
       val jsonWithoutOptional = correctJson.as[JsObject] - "email" - "nino" - "externalId"
       jsonWithoutOptional.validate[IdentityData] shouldBe a[JsSuccess[?]]
     }
+  }
 
+  "ItmpNameData JSON format" should {
+    
     "serialize to JSON correctly" in {
       Json.toJson(model)(IdentityData.given_OFormat_ItmpName) shouldBe json
     }

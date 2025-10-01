@@ -54,7 +54,6 @@ class NrsConnector @Inject() (val httpClient: HttpClientV2, appConfig: AppConfig
 
       httpClient
         .post(url"$url")
-        .setHeader("Content-Type" -> "application/json")
         .setHeader("X-API-Key" -> apiKey)
         .withBody(Json.toJson(nrsSubmission))
         .execute[HttpResponse]

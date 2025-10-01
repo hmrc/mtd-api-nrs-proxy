@@ -50,4 +50,3 @@ lazy val it = project
   .settings(
     Test / fork := true,
     Test / javaOptions += "-Dlogger.resource=logback-test.xml")
-  .settings(libraryDependencies ++= AppDependencies.itDependencies)
