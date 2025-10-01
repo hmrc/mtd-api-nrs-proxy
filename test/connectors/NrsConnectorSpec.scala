@@ -37,8 +37,6 @@ import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.HttpClientV2Module
 import utils.NrsTestData.FullRequestTestData
-
-import scala.compiletime.uninitialized
 import scala.concurrent.duration.{FiniteDuration, *}
 
 class NrsConnectorSpec extends ConnectorSpec with BeforeAndAfterAll with GuiceOneAppPerSuite with Injecting with MockAppConfig {
@@ -56,7 +54,7 @@ class NrsConnectorSpec extends ConnectorSpec with BeforeAndAfterAll with GuiceOn
 
   private val wireMockServer = new WireMockServer(WireMockConfiguration.wireMockConfig().dynamicPort())
 
-  var port: Int = uninitialized
+  lazy val port: Int = wireMockServer.port()
 
   val actorSystem: ActorSystem              = inject[ActorSystem]
   implicit val scheduler: Scheduler         = actorSystem.scheduler
@@ -70,13 +68,9 @@ class NrsConnectorSpec extends ConnectorSpec with BeforeAndAfterAll with GuiceOn
                  |   "nrSubmissionId": "submissionId"
                  |}""".stripMargin)
 
-  override def beforeAll(): Unit = {
-    wireMockServer.start()
-    port = wireMockServer.port()
-  }
+  override def beforeAll(): Unit = wireMockServer.start()
 
-  override def afterAll(): Unit =
-    wireMockServer.stop()
+  override def afterAll(): Unit = wireMockServer.stop()
 
   val url         = "/submission"
   val apiKeyValue = "api-key"
@@ -101,7 +95,7 @@ class NrsConnectorSpec extends ConnectorSpec with BeforeAndAfterAll with GuiceOn
             .willReturn(aResponse()
               .withBody(successResponseJson.toString)
               .withStatus(ACCEPTED)))
-        
+
         await(connector.submit(nrsSubmission)) shouldBe Right(NrsResponse("submissionId"))
 
       }

@@ -51,7 +51,7 @@ class IdentityDataSpec extends UnitSpec {
   }
 
   "ItmpNameData JSON format" should {
-    
+
     "serialize to JSON correctly" in {
       Json.toJson(model)(IdentityData.given_OFormat_ItmpName) shouldBe json
     }
