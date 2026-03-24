@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ import sbt.*
 
 object AppDependencies {
 
-  val bootstrapPlay30Version = "9.19.0"
+  val bootstrapPlay30Version = "10.7.0"
 
   val compile: Seq[ModuleID] = Seq(
     "uk.gov.hmrc"                  %% "bootstrap-backend-play-30" % bootstrapPlay30Version,
@@ -28,7 +28,7 @@ object AppDependencies {
 
   val test: Seq[sbt.ModuleID] = Seq(
     "uk.gov.hmrc"         %% "bootstrap-test-play-30" % bootstrapPlay30Version,
-    "org.scalamock"       %% "scalamock"              % "7.5.0",
+    "org.scalamock"       %% "scalamock"              % "7.5.5",
     "com.github.pjfanning" %% "pekko-mock-scheduler"   % "0.6.0"
 
   ).map(_ % Test)
