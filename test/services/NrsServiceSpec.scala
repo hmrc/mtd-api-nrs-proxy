@@ -21,7 +21,7 @@ import mocks.{MockMetrics, MockNrsConnector}
 import models.auth.UserDetails
 import models.request.{Metadata, NINO, NrsSubmission, SearchKeys}
 import models.response.{NrsFailure, NrsResponse}
-import org.joda.time.DateTime
+import java.time.ZonedDateTime
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import uk.gov.hmrc.play.bootstrap.metrics.Metrics
@@ -37,7 +37,7 @@ class NrsServiceSpec extends ServiceSpec with MockNrsConnector with MockHashUtil
   private val nino: String         = "AA111111A"
   private val notableEvent: String = "submit"
 
-  private val timestamp: DateTime = DateTime.parse("2018-04-07T12:13:25.156Z")
+  private val timestamp: ZonedDateTime = ZonedDateTime.parse("2018-04-07T12:13:25.156Z")
 
   private val submitRequestBodyString = Json.toJson("""{
       |"test":"test123"

@@ -16,9 +16,8 @@
 
 package models.request
 
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import play.api.libs.json._
-import utils.DateUtils
 
 case class SearchKeys(identifier: Option[Identifier] = None,
                       companyName: Option[String] = None,
@@ -26,7 +25,6 @@ case class SearchKeys(identifier: Option[Identifier] = None,
                       periodKey: Option[String] = None)
 
 object SearchKeys {
-  implicit val dateFormats: Format[LocalDate] = DateUtils.dateFormat
 
   implicit val writes: OWrites[SearchKeys] = (o: SearchKeys) =>
     JsObject.apply(

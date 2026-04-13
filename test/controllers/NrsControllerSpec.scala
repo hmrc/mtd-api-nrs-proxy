@@ -16,15 +16,15 @@
 
 package controllers
 
-import mocks._
+import mocks.*
 import models.auth.UserDetails
 import models.errors.{BadRequestError, DownstreamError}
-import org.joda.time.DateTime
+
+import java.time.ZonedDateTime
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.metrics.Metrics
-import utils.DateUtils
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -32,19 +32,15 @@ import scala.concurrent.Future
 class NrsControllerSpec
     extends ControllerBaseSpec
     with MockEnrolmentsAuthService
-    with MockCurrentDateTime
     with MockNrsService
     with MockIdGenerator
     with MockMtdIdLookupService {
 
-  val date: DateTime        = DateTime.parse("2017-01-01T00:00:00.000Z")
-  val fmt: String           = DateUtils.dateTimePattern
+  val date: ZonedDateTime   = ZonedDateTime.parse("2017-01-01T00:00:00.000Z")
   val nino: String          = "AA123456A"
-  val vrn: String           = "123456789"
   val notableEvent: String  = "submit"
   val correlationId: String = "X-ID"
   val uid: String           = "a5894863-9cd7-4d0d-9eee-301ae79cbae6"
-  val periodKey: String     = "A1A2"
 
   trait Test {
     val hc: HeaderCarrier = HeaderCarrier()
@@ -56,13 +52,11 @@ class NrsControllerSpec
       lookupService = mockMtdIdLookupService,
       nrsService = mockNrsService,
       cc = cc,
-      dateTime = mockCurrentDateTime,
       idGenerator = mockIdGenerator
     )
 
     def setUpMocks(): Unit = {
 
-      MockCurrentDateTime.getCurrentDate.returns(date).anyNumberOfTimes()
       MockIdGenerator.getUid.returns(uid).once()
       MockIdGenerator.getUid.returns(correlationId).anyNumberOfTimes()
     }

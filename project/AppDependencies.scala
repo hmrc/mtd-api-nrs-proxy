@@ -22,8 +22,7 @@ object AppDependencies {
   val bootstrapPlay30Version = "10.7.0"
 
   val compile: Seq[ModuleID] = Seq(
-    "uk.gov.hmrc"                  %% "bootstrap-backend-play-30" % bootstrapPlay30Version,
-    "org.playframework"            %% "play-json-joda"            % "3.0.5"
+    "uk.gov.hmrc"                  %% "bootstrap-backend-play-30" % bootstrapPlay30Version
   )
 
   val test: Seq[sbt.ModuleID] = Seq(
