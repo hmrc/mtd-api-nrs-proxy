@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2026 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -115,6 +115,22 @@ class NrsControllerSpec
 
           status(result) shouldBe INTERNAL_SERVER_ERROR
         }
+      }
+
+      "use provided CorrelationId" in new Test {
+
+        setUpMocks()
+        MockEnrolmentsAuthService.authoriseUser().returns(Future.successful(Right(UserDetails("id", "Individual", None, None))))
+        MockMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
+
+        MockNrsService
+          .submit(nino, notableEvent, submitRequestBodyJson, uid, date)
+          .returns(Future.successful((): Unit))
+
+        private val requestWithHeader      = fakePostRequest(submitRequestBodyJson).withHeaders("CorrelationId" -> correlationId)
+        private val result: Future[Result] = controller.submit(nino, "submit")(requestWithHeader)
+
+        status(result) shouldBe OK
       }
     }
   }
