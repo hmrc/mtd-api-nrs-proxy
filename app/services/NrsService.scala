@@ -19,7 +19,8 @@ package services
 import connectors.NrsConnector
 import controllers.UserRequest
 import models.request.{Metadata, NINO, NrsSubmission, SearchKeys}
-import org.joda.time.DateTime
+
+import java.time.ZonedDateTime
 import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.metrics.Metrics
@@ -31,7 +32,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class NrsService @Inject() (connector: NrsConnector, hashUtil: HashUtil, override val metrics: Metrics) extends Timer with Logging {
 
-  def submit(identifier: String, notableEvent: String, body: JsValue, generatedNrsId: String, submissionTimestamp: DateTime)(implicit
+  def submit(identifier: String, notableEvent: String, body: JsValue, generatedNrsId: String, submissionTimestamp: ZonedDateTime)(implicit
       request: UserRequest[?],
       hc: HeaderCarrier,
       ec: ExecutionContext,
@@ -54,7 +55,7 @@ class NrsService @Inject() (connector: NrsConnector, hashUtil: HashUtil, overrid
   def buildItsaNrsSubmission(identifier: String,
                              notableEvent: String,
                              body: JsValue,
-                             submissionTimestamp: DateTime,
+                             submissionTimestamp: ZonedDateTime,
                              request: UserRequest[?]): NrsSubmission = {
 
     val payloadString  = body.toString()

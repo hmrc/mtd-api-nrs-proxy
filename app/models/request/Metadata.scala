@@ -16,15 +16,14 @@
 
 package models.request
 
-import org.joda.time.DateTime
-import play.api.libs.json._
-import utils.DateUtils
+import java.time.ZonedDateTime
+import play.api.libs.json.*
 
 case class Metadata(businessId: String,
                     notableEvent: String,
                     payloadContentType: String,
                     payloadSha256Checksum: String,
-                    userSubmissionTimestamp: DateTime,
+                    userSubmissionTimestamp: ZonedDateTime,
                     identityData: Option[IdentityData],
                     userAuthToken: String,
                     headerData: JsValue,
@@ -32,6 +31,5 @@ case class Metadata(businessId: String,
 
 object Metadata {
   implicit val idformat: OFormat[IdentityData] = IdentityData.given_OFormat_IdentityData
-  implicit val dateFormats: Format[DateTime]   = DateUtils.isoInstantDateFormat
   implicit val writes: OWrites[Metadata]       = Json.writes[Metadata]
 }

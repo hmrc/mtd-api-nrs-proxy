@@ -16,14 +16,13 @@
 
 package utils
 
-import models.request._
-import org.joda.time.{DateTime, LocalDate => JodaLocalDate}
+import models.request.*
 import play.api.libs.json.{JsObject, JsValue, Json}
 import uk.gov.hmrc.auth.core.AffinityGroup.Agent
-import uk.gov.hmrc.auth.core.retrieve._
+import uk.gov.hmrc.auth.core.retrieve.*
 import uk.gov.hmrc.auth.core.{ConfidenceLevel, User}
 
-import java.time.{Instant, LocalDate}
+import java.time.{Instant, LocalDate, ZonedDateTime}
 
 object NrsTestData {
 
@@ -145,7 +144,7 @@ object NrsTestData {
       notableEvent = "submit",
       payloadContentType = "application/json",
       payloadSha256Checksum = "2c98a3e52aed1f06728e35e4f47699bd4af6f328c3dabfde998007382dba86ce",
-      userSubmissionTimestamp = DateTime.parse("2018-04-07T12:13:25Z"),
+      userSubmissionTimestamp = ZonedDateTime.parse("2018-04-07T12:13:25Z"),
       identityData = None,
       userAuthToken = "Bearer AbCdEf123456...",
       headerData = Json.toJson(
@@ -183,7 +182,7 @@ object NrsTestData {
       SearchKeys(
         identifier = Some(NINO("identifier")),
         companyName = Some("Good, Bad & Ugly Ltd"),
-        taxPeriodEndDate = Some(JodaLocalDate.parse("2018-06-04")),
+        taxPeriodEndDate = Some(LocalDate.parse("2018-06-04")),
         periodKey = Some("period key")
       )
 

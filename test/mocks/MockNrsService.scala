@@ -17,7 +17,7 @@
 package mocks
 
 import controllers.UserRequest
-import org.joda.time.DateTime
+import java.time.ZonedDateTime
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import play.api.libs.json.JsValue
@@ -33,9 +33,9 @@ trait MockNrsService extends TestSuite with MockFactory {
 
   object MockNrsService {
 
-    def submit(identifier: String, notableEvent: String, body: JsValue, nrsId: String, dateTime: DateTime): CallHandler[Future[Unit]] = {
+    def submit(identifier: String, notableEvent: String, body: JsValue, nrsId: String, dateTime: ZonedDateTime): CallHandler[Future[Unit]] = {
       (mockNrsService
-        .submit(_: String, _: String, _: JsValue, _: String, _: DateTime)(_: UserRequest[?], _: HeaderCarrier, _: ExecutionContext, _: String))
+        .submit(_: String, _: String, _: JsValue, _: String, _: ZonedDateTime)(_: UserRequest[?], _: HeaderCarrier, _: ExecutionContext, _: String))
         .expects(identifier, *, *, *, *, *, *, *, *)
     }
 

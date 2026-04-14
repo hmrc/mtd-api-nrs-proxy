@@ -19,8 +19,9 @@ package controllers
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
 import services.{EnrolmentsAuthService, MtdIdLookupService, NrsService}
-import utils.{CurrentDateTime, IdGenerator, Logging}
+import utils.{IdGenerator, Logging}
 
+import java.time.{ZonedDateTime, ZoneOffset, Instant}
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -29,7 +30,6 @@ class NrsController @Inject() (val authService: EnrolmentsAuthService,
                                val lookupService: MtdIdLookupService,
                                nrsService: NrsService,
                                val idGenerator: IdGenerator,
-                               dateTime: CurrentDateTime,
                                cc: ControllerComponents)(implicit ec: ExecutionContext)
     extends AuthorisedController(cc)
     with Logging {
@@ -41,7 +41,7 @@ class NrsController @Inject() (val authService: EnrolmentsAuthService,
         case Some(id) => id
       }
       val nrsId               = idGenerator.getUid
-      val submissionTimestamp = dateTime.getDateTime
+      val submissionTimestamp = ZonedDateTime.ofInstant(Instant.now(), ZoneOffset.UTC)
 
       logger.info(s"[NrsController] [submit] NRS submission request received for $notableEvent")
 
